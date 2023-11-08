@@ -32,3 +32,17 @@ export class PermissionError extends Error {
         this.name = 'PermissionError';
     }
 }
+
+export class BusinessUnitError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'BusinessUnitError';
+    }
+}
+
+export class SchoolError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'SchoolError';
+    }
+}

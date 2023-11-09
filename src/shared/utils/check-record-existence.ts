@@ -1,6 +1,7 @@
 import { Op } from "sequelize";
 
 export async function checkRecordExistence(modelInstance: any, id: string, data: {name: string, nickname: string, code: string}, CustomError: any) {
+    if (!data.name && !data.nickname && !data.code) return [];
     const whereCondition: {
         [key: string]: any;
     } = { id: { [Op.ne]: id } };

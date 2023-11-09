@@ -1,9 +1,6 @@
 import { Op, col, where } from "sequelize";
 import { BusinessUnitError } from "../../../shared/errors";
-import { BusinessUnit } from "../../../shared/schemas";
-import { Campus } from "../../../shared/schemas/campus.schema";
-import { School } from "../../../shared/schemas/school.schema";
-import { Semester } from "../../../shared/schemas/semester.schema";
+import { BusinessUnit, Campus, School, Semester } from "../../../shared/schemas";
 
 export async function DeleteBusinessUnit(id: string) {
     try {

@@ -1,6 +1,6 @@
 import { BusinessUnitError, SchoolError } from "../../../shared/errors";
 import { BusinessUnit, School } from "../../../shared/schemas";
-import { checkRecordExistence, errorMessage } from "../../../shared/utils/check-record-existence";
+import { checkRecordExistence, errorMessage } from "../../../shared/utils";
 import { UpdateSchoolInterface } from "../school.type";
 
 export async function UpdateSchool(id: string, data: UpdateSchoolInterface) {

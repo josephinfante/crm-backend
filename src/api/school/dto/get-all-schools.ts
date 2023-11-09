@@ -3,7 +3,7 @@ import { BusinessUnit, School } from "../../../shared/schemas";
 
 export async function GetAllSchools() {
     try {
-        const business_units = await BusinessUnit.findAll({
+        const schools = await BusinessUnit.findAll({
             include: [
                 {
                     model: School,
@@ -12,8 +12,8 @@ export async function GetAllSchools() {
                 },
             ],
             raw: true,
-        }).catch(_error => { console.log(_error);throw new BusinessUnitError("Ha ocurrido un error al revisar las escuela profesional.")}).then(business_units => business_units);
-        const reshapedSchools = business_units.filter((business_unit:any) => business_unit['schools.id'] !== null).map((business_unit: any) => ({
+        }).catch(_error => {throw new BusinessUnitError("Ha ocurrido un error al revisar las escuela profesional.")}).then(schools => schools);
+        const reshapedSchools = schools.filter((business_unit:any) => business_unit['schools.id'] !== null).map((business_unit: any) => ({
             id: business_unit['schools.id'],
             name: business_unit['schools.name'],
             nickname: business_unit['schools.nickname'],

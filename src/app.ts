@@ -7,6 +7,7 @@ import { pageRouter } from "./api/page/page.routes";
 import { componentRouter } from "./api/component/component.routes";
 import { permissionRouter } from "./api/permission/permission.routes";
 import { businessUnitRouter } from "./api/business-unit/business-unit.routes";
+import { schoolRouter } from "./api/school/school.routes";
 
 export const app: Application = express();
 
@@ -31,6 +32,7 @@ app.use("/api", pageRouter);
 app.use("/api", componentRouter);
 app.use("/api", permissionRouter);
 app.use("/api", businessUnitRouter);
+app.use("/api", schoolRouter);
 app.use("/", (_req, res) => {
     res.status(200).json({message: "Welcome to the API"})
 });

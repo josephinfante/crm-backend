@@ -46,3 +46,10 @@ export class SchoolError extends Error {
         this.name = 'SchoolError';
     }
 }
+
+export class CareerError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'CareerError';
+    }
+}

@@ -6,7 +6,7 @@ export async function GetAllPages() {
         const pages = await Page.findAll({
             include: [{ model: Role, attributes: ['name'] }],
             raw: true,
-        }).catch(_error => {throw new PageError('Ha ocurrido un error al tratar de obtener las páginas.')});
+        }).catch(_error => {throw new PageError('Ha ocurrido un error al tratar de obtener las páginas.')}).then(pages => pages);
         const reshapedPages = pages.map((page: any) => ({
             id: page.id,
             name: page.name,

@@ -1,8 +1,8 @@
 // import { Op } from "sequelize";
 import { BusinessUnitError } from "../../../shared/errors";
 import { BusinessUnit } from "../../../shared/schemas";
+import { checkRecordExistence, errorMessage } from "../../../shared/utils";
 import { UpdateBusinessUnitInterface } from "../business-unit.type";
-import { checkRecordExistence, errorMessage } from "../../../shared/utils/check-record-existence";
 
 export async function UpdateBusinessUnit(id: string, data: UpdateBusinessUnitInterface) {
     try {

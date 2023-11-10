@@ -60,3 +60,10 @@ export class CampusError extends Error {
         this.name = 'CampusError';
     }
 }
+
+export class SemesterError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'SemesterError';
+    }
+}

@@ -5,7 +5,7 @@ import { UpdateCampusInterface } from "../campus.type";
 
 export async function UpdateCampus(id: string, data: UpdateCampusInterface) {
     try {
-        const campus = await Campus.findOne({ where: { id: id }}).catch(_error => { throw new CampusError("Ha ocurrido un error al revisar la sede.")}).then(school => school);
+        const campus = await Campus.findOne({ where: { id: id }}).catch(_error => { throw new CampusError("Ha ocurrido un error al revisar la sede.")}).then(campus => campus);
         if (!campus) throw new CampusError(`La sede con id ${id} no existe.`);
         const business_unit_exist = data.business_unit ? await BusinessUnit.findOne({ where : { name: data.business_unit }}).catch(_error => { throw new BusinessUnitError("Ha ocurrido un error al revisar la unidad de negocio.")}).then(business_unit => business_unit) : null;
         if (data.business_unit && !business_unit_exist) throw new BusinessUnitError(`La unidad de negocio '${data.business_unit}' no existe.`);

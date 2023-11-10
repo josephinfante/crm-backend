@@ -9,6 +9,7 @@ import { permissionRouter } from "./api/permission/permission.routes";
 import { businessUnitRouter } from "./api/business-unit/business-unit.routes";
 import { schoolRouter } from "./api/school/school.routes";
 import { careerRouter } from "./api/career/career.routes";
+import { campusRouter } from "./api/campus/campus.routes";
 
 export const app: Application = express();
 
@@ -35,6 +36,7 @@ app.use("/api", permissionRouter);
 app.use("/api", businessUnitRouter);
 app.use("/api", schoolRouter);
 app.use("/api", careerRouter);
+app.use("/api", campusRouter);
 app.use("/", (_req, res) => {
     res.status(200).json({message: "Welcome to the API"})
 });

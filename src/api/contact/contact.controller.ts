@@ -9,7 +9,7 @@ import { GetAllContacts } from "./dto/get-all-contacts";
 export async function createContact(req: Request, res: Response) {
     try {
         await CreateContact(req.body);
-        res.status(201).json({ message: "El contactor ha sido creado." });
+        res.status(201).json({ message: "El contacto ha sido creado." });
     } catch (error) {
         if (error instanceof ContactError) res.status(400).json({error: error.message});
         else res.status(500).json({error: 'Ha ocurrido un error al crear el contacto.'});

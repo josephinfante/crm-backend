@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import { JWT_SECRET } from "../../../../globals";
 import { PageError, RoleError, UserError } from "../../../shared/errors";
 import { Page, Role, User } from "../../../shared/schemas";
@@ -10,7 +11,11 @@ async function loginUser(login: {email: string, password: string}) {
         if (!user) throw new UserError(`El usuario con email ${login.email} no se ha encontrado.`);
         const password_match = await compare_password(login.password, user.dataValues.password);
         if (!password_match) throw new UserError(`La contraseña es incorrecta.`);
-        const pages = await Page.findAll({where: {role_id: user.dataValues.role_id}}).catch(_error => {throw new PageError('Ha ocurrido un error al revisar las páginas del usuario')}).then(pages => pages);
+        const pages = await Page.findAll({
+            where: {
+                role_ids: {[Op.like]: [`%${user.dataValues.role_id}%`]}
+            }
+        }).catch(_error => {throw new PageError('Ha ocurrido un error al revisar las páginas del rol')}).then(pages => pages);
         const role = await Role.findOne({where: {id: user.dataValues.role_id}}).catch(_error => {throw new RoleError('Ha ocurrido un error al revisar el rol del usuario')}).then(role => role);
         const secretKey: Uint8Array = new TextEncoder().encode(JWT_SECRET);
         const sign_content = {id: user.dataValues.id, role: role?.dataValues.name}

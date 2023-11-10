@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import { database } from "../connections/database/mysql";
-import { Role } from "./role.schema";
 
 export const Page = database.define("pages", {
     id: {
@@ -20,13 +19,8 @@ export const Page = database.define("pages", {
         type: DataTypes.DATE,
         allowNull: false,
     },
-    role_id: {
+    role_ids: {
         type: DataTypes.STRING,
         allowNull: false,
-        references: {
-            model: Role,
-            key: 'id',
-        },
     },
 });
-Page.hasOne(Role, {foreignKey: 'id', sourceKey: 'role_id'});

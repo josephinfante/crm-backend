@@ -1,6 +1,6 @@
 export interface CreatePageInterface {
     name: string;
-    role: string;
+    roles: string[];
 }
 
 export interface UpdatePageInterface extends CreatePageInterface {}

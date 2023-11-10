@@ -9,7 +9,7 @@ export async function UpdateSchool(id: string, data: UpdateSchoolInterface) {
         if (!school) throw new SchoolError(`La escuela profesional con id ${id} no existe.`);
         const business_unit_exist = data.business_unit ? await BusinessUnit.findOne({ where : { name: data.business_unit }}).catch(_error => { throw new BusinessUnitError("Ha ocurrido un error al revisar la unidad de negocio.")}).then(business_unit => business_unit) : null;
         if (data.business_unit && !business_unit_exist) throw new BusinessUnitError(`La unidad de negocio '${data.business_unit}' no existe.`);
-        const school_exists = await checkRecordExistence(School, id, data, SchoolError);
+        const school_exists = await checkRecordExistence(School, id, data, SchoolError, "Ha ocurrido un error al revisar la escuela profesional.");
         if (school_exists.length) throw new SchoolError(errorMessage('una escuela profesional', data));
         school.set({
             name: data.name ?? school.dataValues.name,

@@ -9,7 +9,7 @@ export async function UpdateCareer(id: string, data: UpdateCareerInterface) {
         if (!career) throw new CareerError(`La carrera con ID ${id} no existe.`);
         const school_exists = data.school ? await School.findOne({ where : { name: data.school }}).catch(_error => { throw new SchoolError("Ha ocurrido un error al revisar la escuela profesional.")}).then(school => school) : null;
         if (data.school && !school_exists) throw new SchoolError(`La escuela profesional '${data.school}' no existe.`);
-        const career_exists = await checkRecordExistence(Career, id, data, CareerError);
+        const career_exists = await checkRecordExistence(Career, id, data, CareerError, "Ha ocurrido un error al revisar la carrera.");
         if (career_exists.length) throw new CareerError(errorMessage('una carrera', data));
         career.set({
             name: data.name ?? career.dataValues.name,

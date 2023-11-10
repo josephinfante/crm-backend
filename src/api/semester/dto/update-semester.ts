@@ -9,7 +9,7 @@ export async function UpdateSemester(id: string, data: UpdateSemesterInterface) 
         if (!semester) throw new SemesterError(`El semestre académico con id ${id} no existe.`);
         const business_unit_exist = data.business_unit ? await BusinessUnit.findOne({ where : { name: data.business_unit }}).catch(_error => { throw new BusinessUnitError("Ha ocurrido un error al revisar la unidad de negocio.")}).then(business_unit => business_unit) : null;
         if (data.business_unit && !business_unit_exist) throw new BusinessUnitError(`La unidad de negocio '${data.business_unit}' no existe.`);
-        const semester_exists = await checkRecordExistence(Semester, id, data, SemesterError);
+        const semester_exists = await checkRecordExistence(Semester, id, data, SemesterError, "Ha ocurrido un error al revisar el semestre académico.");
         if (semester_exists.length) throw new SemesterError(errorMessage('un semestre académico', data));
         semester.set({
             name: data.name ?? semester.dataValues.name,

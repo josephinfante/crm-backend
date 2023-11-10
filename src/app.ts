@@ -8,7 +8,7 @@ import { componentRouter } from "./api/component/component.routes";
 import { permissionRouter } from "./api/permission/permission.routes";
 import { businessUnitRouter } from "./api/business-unit/business-unit.routes";
 import { schoolRouter } from "./api/school/school.routes";
-import { careerRouter } from "./api/carrer/career.routes";
+import { careerRouter } from "./api/career/career.routes";
 
 export const app: Application = express();
 

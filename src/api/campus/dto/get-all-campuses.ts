@@ -12,7 +12,7 @@ export async function GetAllCampuses() {
                 },
             ],
             raw: true,
-        }).catch(_error => {throw new BusinessUnitError("Ha ocurrido un error al revisar las sedes.")}).then(schools => schools);
+        }).catch(_error => {throw new BusinessUnitError("Ha ocurrido un error al revisar las sedes.")}).then(campuses => campuses);
         const reshapedCampuses = campuses.filter((business_unit:any) => business_unit['campuses.id'] !== null).map((business_unit: any) => ({
             id: business_unit['campuses.id'],
             name: business_unit['campuses.name'],

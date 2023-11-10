@@ -13,7 +13,7 @@ export async function GetCampus(id: string) {
                 },
             ],
             raw: true,
-        }).catch(_error => {throw new BusinessUnitError("Ha ocurrido un error al revisar la sede.")}).then(school => school);
+        }).catch(_error => {throw new BusinessUnitError("Ha ocurrido un error al revisar la sede.")}).then(campus => campus);
         if (!campus) throw new CampusError(`La sede con ID ${id} no existe.`);
         return {
             id: campus['campuses.id'],

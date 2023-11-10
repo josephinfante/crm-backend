@@ -4,7 +4,6 @@ import { ContactChannel } from "../../../shared/schemas";
 export async function GetAllContactChannels() {
     try {
         const contact_channels = await ContactChannel.findAll().catch((_error) => { throw new ContactChannelError("Ha ocurrido un error al revisar los canales de contacto.")}).then(contact_channels => contact_channels);
-        console.log(contact_channels);
         return contact_channels.map(contact_channel => ({
                 id: contact_channel.dataValues.id,
                 name: contact_channel.dataValues.name,

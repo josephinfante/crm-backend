@@ -1,6 +1,6 @@
 import { Op } from "sequelize";
 
-export async function checkRecordExistence(modelInstance: any, id: string, data: {name: string, nickname: string, code: string}, CustomError: any) {
+export async function checkRecordExistence(modelInstance: any, id: string, data: {name: string, nickname: string, code: string}, CustomError: any, ErrorMessage: string) {
     if (!data.name && !data.nickname && !data.code) return [];
     const whereCondition: {
         [key: string]: any;
@@ -22,7 +22,7 @@ export async function checkRecordExistence(modelInstance: any, id: string, data:
     }
     const record_exists = await modelInstance.findAll({
             where: whereCondition
-        }).catch((_error: any) => {throw new CustomError("Ha ocurrido un error al revisar la unidad de negocio.")}).then((records: any) => records);
+        }).catch((_error: any) => {throw new CustomError(ErrorMessage)}).then((records: any) => records);
     return record_exists;
 }
 

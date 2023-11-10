@@ -2,6 +2,8 @@ export * from './business-unit.schema';
 export * from './campus.schema';
 export * from './career.schema';
 export * from './component.schema';
+export * from './contact-channel.schema';
+export * from './contact.schema';
 export * from './page.schema';
 export * from './permission.schema';
 export * from './role.schema';

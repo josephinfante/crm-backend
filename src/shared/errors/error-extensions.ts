@@ -74,3 +74,10 @@ export class ContactError extends Error {
         this.name = 'ContactError';
     }
 }
+
+export class ContactChannelError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'ContactChannel';
+    }
+}

@@ -49,7 +49,7 @@ export async function deleteCareer(req: Request, res: Response) {
 export async function getAllCareers(_req: Request, res: Response) {
     try {
         const careers = await GetAllCareers();
-        res.status(200).json({ careers });
+        res.status(200).json(careers);
     } catch (error) {
         if (error instanceof CareerError) res.status(400).json({ message: error.message });
         else res.status(500).json({ message: "Ha ocurrido un error al obtener las carreras." });

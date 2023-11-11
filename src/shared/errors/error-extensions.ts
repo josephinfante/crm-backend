@@ -78,6 +78,13 @@ export class ContactError extends Error {
 export class ContactChannelError extends Error {
     constructor(message: string) {
         super(message);
-        this.name = 'ContactChannel';
+        this.name = 'ContactChannelError';
+    }
+}
+
+export class OpportunityError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'OpportunityError';
     }
 }

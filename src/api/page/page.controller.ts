@@ -5,7 +5,7 @@ import { GetPage } from "./dto/get-page";
 import { UpdatePage } from "./dto/update-page";
 import { DeletePage } from "./dto/delete-page";
 import { GetAllPages } from "./dto/get-all-pages";
-import { GetPagesByRole } from "./dto/get-pages-by-role";
+import { GetPagesByRoleName } from "./dto/get-pages-by-role-name";
 
 export async function createPage(req: Request, res: Response) {
     try {
@@ -57,9 +57,9 @@ export async function getAllPages(_req: Request, res: Response) {
     }
 }
 
-export async function getPagesByRole(req: Request, res: Response) {
+export async function getPagesByRoleName(req: Request, res: Response) {
     try {
-        const pages = await GetPagesByRole(req.params.role);
+        const pages = await GetPagesByRoleName(req.params.role_name);
         res.status(200).json(pages);
     } catch (error) {
         if (error instanceof PageError) res.status(400).json({error: error.message});

@@ -28,7 +28,7 @@ export async function getRole(req: Request, res: Response) {
 
 export async function updateRole(req: Request, res: Response) {
     try {
-        await UpdateRole(req.params.id, req.body.name);
+        await UpdateRole(req.params.id, req.body);
         res.status(200).json({message: 'El rol ha sido actualizado.'});
     } catch (error) {
         if (error instanceof RoleError) res.status(400).json({error: error.message});

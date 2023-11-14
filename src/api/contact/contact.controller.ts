@@ -5,6 +5,7 @@ import { GetContact } from "./dto/get-contact";
 import { UpdateContact } from "./dto/update-contact";
 import { DeleteContact } from "./dto/delete-contact";
 import { GetAllContacts } from "./dto/get-all-contacts";
+import { GetContactsByName } from "./dto/get-contacts-by-name";
 
 export async function createContact(req: Request, res: Response) {
     try {
@@ -49,6 +50,16 @@ export async function deleteContact(req: Request, res: Response) {
 export async function getAllContacts(req: Request, res: Response) {
     try {
         const contacts = await GetAllContacts(Number(req.query.page??1));
+        res.status(200).json(contacts);
+    } catch (error) {
+        if (error instanceof ContactError) res.status(400).json({error: error.message});
+        else res.status(500).json({error: 'Ha ocurrido un error al obtener los contactos.'});
+    }
+}
+
+export async function getContactsByName(req: Request, res: Response) {
+    try {
+        const contacts = await GetContactsByName(req.params.first_name, Number(req.query.page??1));
         res.status(200).json(contacts);
     } catch (error) {
         if (error instanceof ContactError) res.status(400).json({error: error.message});

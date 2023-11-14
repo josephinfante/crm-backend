@@ -1,6 +1,6 @@
 export interface PermissionCreateInterface {
-    component: string,
-    role: string,
+    component_id: string,
+    role_id: string,
     create: boolean,
     read: boolean,
     update: boolean,

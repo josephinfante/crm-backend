@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createContact, deleteContact, getAllContacts, getContact, updateContact } from "./contact.controller";
+import { createContact, deleteContact, getAllContacts, getContact, getContactsByName, updateContact } from "./contact.controller";
 
 export const contactRouter = Router();
 
@@ -8,3 +8,4 @@ contactRouter.get("/v1/contact/:id", getContact);
 contactRouter.put("/v1/contact/:id", updateContact);
 contactRouter.delete("/v1/contact/:id", deleteContact);
 contactRouter.get("/v1/contacts", getAllContacts);
+contactRouter.get("/v1/contacts/:first_name", getContactsByName);

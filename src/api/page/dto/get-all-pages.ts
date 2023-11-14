@@ -12,6 +12,9 @@ export async function GetAllPages() {
             return {
                 id: page.dataValues.id,
                 name: page.dataValues.name,
+                nickname: page.dataValues.nickname,
+                internal_url: page.dataValues.internal_url,
+                external_url: page.dataValues.external_url,
                 roles: roleNames,
                 updatedAt: page.dataValues.updatedAt,
                 createdAt: page.dataValues.createdAt,

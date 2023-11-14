@@ -59,7 +59,7 @@ export async function getAllContacts(req: Request, res: Response) {
 
 export async function getContactsByName(req: Request, res: Response) {
     try {
-        const contacts = await GetContactsByName(req.params.first_name);
+        const contacts = await GetContactsByName(req.params.first_name, Number(req.query.page??1));
         res.status(200).json(contacts);
     } catch (error) {
         if (error instanceof ContactError) res.status(400).json({error: error.message});

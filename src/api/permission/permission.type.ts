@@ -20,3 +20,17 @@ export interface PermissionInterface {
     component_id: string,
     role_id: string,
 }
+
+export interface GetPermissionByRoleIdInterface {
+    id: number;
+    component: {
+        id: number;
+        name: string;
+    };
+    create: boolean;
+    read: boolean;
+    update: boolean;
+    delete: boolean;
+    updatedAt: Date;
+    createdAt: Date;
+}

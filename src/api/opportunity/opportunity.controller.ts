@@ -8,11 +8,11 @@ import { GetAllOpportunities } from "./dto/get-all-opportunities";
 
 export async function createOpportunity(req: Request, res: Response) {
     try {
-        await CreateOpportunity(req.body);
+        await CreateOpportunity(res.locals.id, req.body);
         res.status(201).json({ message: "La oportunidad ha sido creada." });
     } catch (error) {
-        if (error instanceof OpportunityError) res.status(400).json({ message: error.message });
-        else res.status(500).json({ message: "Ha ocurrido un error al crear la oportunidad." });
+        if (error instanceof OpportunityError) res.status(400).json({ error: error.message });
+        else res.status(500).json({ error: "Ha ocurrido un error al crear la oportunidad." });
     }
 }
 
@@ -21,18 +21,18 @@ export async function getOpportunity(req: Request, res: Response) {
         const opportunity = await GetOpportunity(req.params.id);
         res.status(200).json(opportunity);
     } catch (error) {
-        if (error instanceof OpportunityError) res.status(400).json({ message: error.message });
-        else res.status(500).json({ message: "Ha ocurrido un error al obtener la oportunidad." });
+        if (error instanceof OpportunityError) res.status(400).json({ error: error.message });
+        else res.status(500).json({ error: "Ha ocurrido un error al obtener la oportunidad." });
     }
 }
 
 export async function updateOpportunity(req: Request, res: Response) {
     try {
-        await UpdateOpportunity(req.params.id, req.body);
+        await UpdateOpportunity(req.params.id, res.locals.id, req.body);
         res.status(200).json({ message: "La oportunidad ha sido actualizada." });
     } catch (error) {
-        if (error instanceof OpportunityError) res.status(400).json({ message: error.message });
-        else res.status(500).json({ message: "Ha ocurrido un error al actualizar la oportunidad." });
+        if (error instanceof OpportunityError) res.status(400).json({ error: error.message });
+        else res.status(500).json({ error: "Ha ocurrido un error al actualizar la oportunidad." });
     }
 }
 
@@ -41,8 +41,8 @@ export async function deleteOpportunity(req: Request, res: Response) {
         await DeleteOpportunity(req.params.id);
         res.status(204).send();
     } catch (error) {
-        if (error instanceof OpportunityError) res.status(400).json({ message: error.message });
-        else res.status(500).json({ message: "Ha ocurrido un error al eliminar la oportunidad." });
+        if (error instanceof OpportunityError) res.status(400).json({ error: error.message });
+        else res.status(500).json({ error: "Ha ocurrido un error al eliminar la oportunidad." });
     }
 }
 
@@ -51,7 +51,7 @@ export async function getAllOpportunities(req: Request, res: Response ) {
         const opportunities = await GetAllOpportunities(Number(req.query.page??1));
         res.status(200).json(opportunities);
     } catch (error) {
-        if (error instanceof OpportunityError) res.status(400).json({ message: error.message });
-        else res.status(500).json({ message: "Ha ocurrido un error al obtener las oportunidades." });
+        if (error instanceof OpportunityError) res.status(400).json({ error: error.message });
+        else res.status(500).json({ error: "Ha ocurrido un error al obtener las oportunidades." });
     }
 }

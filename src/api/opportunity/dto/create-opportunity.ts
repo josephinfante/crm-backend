@@ -1,9 +1,9 @@
 import { CareerError, ContactError, OpportunityError, SemesterError } from "../../../shared/errors";
-import { Career, Contact, Opportunity, Semester } from "../../../shared/schemas";
+import { Career, Contact, Opportunity, Semester, User } from "../../../shared/schemas";
 import { UniqueID } from "../../../shared/utils";
 import { CreateOpportunityInterface } from "../opportunity.type";
 
-export async function CreateOpportunity(data: CreateOpportunityInterface) {
+export async function CreateOpportunity(user_id: string, data: CreateOpportunityInterface) {
     try {
         const opportunity = await Opportunity.findAll({
             where: {
@@ -19,11 +19,14 @@ export async function CreateOpportunity(data: CreateOpportunityInterface) {
         if (!career) throw new Error(`La carrera con ID ${data.career_id} no existe.`);
         const semester = await Semester.findOne({ where: { id: data.semester_id } }).catch((_error) => {throw new SemesterError("Ha ocurrido un error al revisar el semestre.")}).then(semester => semester);
         if (!semester) throw new Error(`El semestre con ID ${data.semester_id} no existe.`);
+        const user = await User.findOne({ where: { id: user_id } }).catch((_error) => {throw new Error("Ha ocurrido un error al revisar el usuario.")}).then(user => user);
+        if (!user) throw new Error(`El usuario con ID ${user_id} no existe.`);
         await Opportunity.create({
             id: UniqueID.generate(),
             contact_id: data.contact_id,
             career_id: data.career_id,
             semester_id: data.semester_id,
+            user_id: user_id,
             createdAt: new Date(),
             updatedAt: new Date(),
         }).catch(_error => { throw new OpportunityError("Ha ocurrido un error al tratar de crear la oportunidad.")});

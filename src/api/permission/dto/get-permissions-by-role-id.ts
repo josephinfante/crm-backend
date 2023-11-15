@@ -1,7 +1,8 @@
 import { PermissionError } from "../../../shared/errors";
 import { Component, Permission } from "../../../shared/schemas";
+import { GetPermissionByRoleIdInterface } from "../permission.type";
 
-export async function GetPermissionsByRoleId(role_id: string) {
+export async function GetPermissionsByRoleId(role_id: string): Promise<GetPermissionByRoleIdInterface[]> {
     try {
         const permissions = await Permission.findAll({ 
             where: { role_id: role_id },

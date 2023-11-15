@@ -1,8 +1,8 @@
 import { CareerError, ContactError, OpportunityError, SemesterError } from "../../../shared/errors";
-import { Career, Contact, Opportunity, Semester } from "../../../shared/schemas";
+import { Career, Contact, Opportunity, Semester, User } from "../../../shared/schemas";
 import { UpdateOpportunityInterface } from "../opportunity.type"
 
-export async function UpdateOpportunity(id: string, data: UpdateOpportunityInterface) {
+export async function UpdateOpportunity(id: string, user_id: string, data: UpdateOpportunityInterface) {
     try {
         const opportunity = await Opportunity.findOne({ where: { id } }).catch((_error) => {throw new OpportunityError("Ha ocurrido un error al revisar la oportunidad.")}).then(opportunity => opportunity);
         if (!opportunity) throw new OpportunityError(`La oportunidad con ID ${id} no existe.`);
@@ -20,10 +20,13 @@ export async function UpdateOpportunity(id: string, data: UpdateOpportunityInter
         if (data.career_id && !career) throw new CareerError(`La carrera con ID ${data.career_id} no existe.`);
         const semester = data.semester_id && await Semester.findOne({ where: { id: data.semester_id } }).catch((_error) => {throw new SemesterError("Ha ocurrido un error al revisar el semestre.")}).then(semester => semester);
         if (data.semester_id && !semester) throw new SemesterError(`El semestre con ID ${data.semester_id} no existe.`);
+        const user = await User.findOne({ where: { id: user_id } }).catch((_error) => {throw new Error("Ha ocurrido un error al revisar el usuario.")}).then(user => user);
+        if (!user) throw new Error(`El usuario con ID ${user_id} no existe.`);
         opportunity.set({
             contact_id: data.contact_id && contact ? data.contact_id : opportunity.dataValues.contact_id,
             career_id: data.career_id && career ? data.career_id : opportunity.dataValues.career_id,
             semester_id: data.semester_id && semester ? data.semester_id : opportunity.dataValues.semester_id,
+            user_id: user_id,
             updatedAt: new Date(),
         });
         await opportunity.save().catch((_error) => {throw new OpportunityError("Ha ocurrido un error al actualizar la oportunidad.")});

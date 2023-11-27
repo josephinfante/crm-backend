@@ -19,6 +19,13 @@ export class PageError extends Error {
     }
 }
 
+export class MenuError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'MenuError';
+    }
+}
+
 export class ComponentError extends Error {
     constructor(message: string) {
         super(message);
@@ -86,5 +93,68 @@ export class OpportunityError extends Error {
     constructor(message: string) {
         super(message);
         this.name = 'OpportunityError';
+    }
+}
+
+export class LanguageError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'LanguageError';
+    }
+}
+
+export class NationalityError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'NationalityError';
+    }
+}
+
+export class DegreeError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'DegreeError';
+    }
+}
+
+export class EthnicityError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'EthnicityError';
+    }
+}
+
+export class DegreeSpecificationError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'DegreeSpecificationError';
+    }
+}
+
+export class ContactDegreeError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'ContactDegreeError';
+    }
+}
+
+export class ContactLanguageError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'ContactLanguageError';
+    }
+}
+
+export class CollegeError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'CollegeError';
+    }
+}
+
+export class CountryError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'CountryError';
     }
 }

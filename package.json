@@ -8,7 +8,12 @@
     "start": "node build/index.js",
     "build": "tsc",
     "postinstall": "pnpm run build",
-    "test": "vitest"
+    "test": "vitest",
+    "migrate:countries:dev": "ts-node src/migrations/countries.migration.ts",
+    "migrate:nationalities:dev": "ts-node src/migrations/nationalities.migration.ts",
+    "migrate:languages:dev": "ts-node src/migrations/languages.migration.ts",
+    "migrate:components:dev": "ts-node src/migrations/components.migration.ts",
+    "migrate:pages:dev": "ts-node src/migrations/pages.migration.ts"
   },
   "keywords": [],
   "author": "",
@@ -19,7 +24,8 @@
     "express": "4.18.2",
     "jose": "5.1.0",
     "mysql2": "3.6.3",
-    "sequelize": "6.33.0"
+    "sequelize": "6.33.0",
+    "ts-node": "10.9.1"
   },
   "devDependencies": {
     "@types/bcrypt": "5.0.1",

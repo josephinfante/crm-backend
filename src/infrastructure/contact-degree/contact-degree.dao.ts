@@ -54,7 +54,7 @@ export async function UpdateContactDegree(access: IAccessPermission, contact_deg
                 .catch((_error) => { throw new ContactDegreeError("Ha ocurrido un error al revisar el grado académico del contacto.") });
 
         if (contact_degree_exist) {
-            const contact_degree_coincidence = (contact_degree.college_id !== contact_degree_exist.dataValues.college_id || contact_degree.contact_id !== contact_degree_exist.dataValues.contact_id || contact_degree.degree_specification_id !== contact_degree_exist.dataValues.degree_specification_id || contact_degree.graduation_date !== contact_degree_exist.dataValues.graduation_date) ? await ContactDegreeModel.findAll({
+            const contact_degree_coincidence = (contact_degree.college_id !== contact_degree_exist.dataValues.college_id || contact_degree.degree_specification_id !== contact_degree_exist.dataValues.degree_specification_id || contact_degree.graduation_date !== contact_degree_exist.dataValues.graduation_date) ? await ContactDegreeModel.findAll({
                         where: {
                             [Op.and]: [
                                 { college_id: contact_degree.college_id },

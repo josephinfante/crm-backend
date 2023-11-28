@@ -5,6 +5,9 @@ import userRouter from "./application/user/user.routes";
 import roleRouter from "./application/role/role.routes";
 import componentRouter from "./application/component/component.routes";
 import pageRouter from "./application/page/page.routes";
+import degreeRouter from "./application/degree/degree.routes";
+import degreeSpecificationRouter from "./application/degree-specification/degree-specification.routes";
+import collegeRouter from "./application/college/college.routes";
 
 export const app: Application = express();
 
@@ -27,6 +30,9 @@ app.use("/api", userRouter);
 app.use("/api", roleRouter);
 app.use("/api", componentRouter);
 app.use("/api", pageRouter);
+app.use("/api", degreeRouter);
+app.use("/api", degreeSpecificationRouter);
+app.use("/api", collegeRouter);
 app.use("/", (_req, res) => {
     res.status(200).json({message: "Welcome to the API"})
 });

@@ -65,8 +65,8 @@ class PageDao {
                                     { external_url: page.external_url }
                                 ]
                             },
-                            { user_id: access.user_id },
-                            { id: { [Op.not]: id } } // Exclude specific page ID
+                            ...(access.super_admin === false ? [{ user_id: access.user_id }] : []),
+                            { id: { [Op.ne]: id } }
                         ]
                     }
                 })
@@ -78,6 +78,7 @@ class PageDao {
             page_exist.set({
                 name: page.name ?? page_exist.dataValues.name,
                 external_url: page.external_url ?? page_exist.dataValues.external_url,
+                hidden: page.hidden ?? page_exist.dataValues.hidden,
                 updatedAt: Date.now()
             });
             const updated = await page_exist.save()

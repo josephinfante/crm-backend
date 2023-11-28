@@ -76,4 +76,4 @@ export const UserModel = database.define("users", {
         defaultValue: null,
     }
 });
-UserModel.hasOne(RoleModel, {foreignKey: 'id', sourceKey: 'role_id'});
+UserModel.hasOne(RoleModel, { foreignKey: 'id', sourceKey: 'role_id' });

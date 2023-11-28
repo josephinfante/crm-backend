@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { database } from "../connections/database/mysql";
 import { UserModel } from "./user.model";
 
-export const NationalityModel = database.define("nationalities", {
+export const CollegeModel = database.define("colleges", {
     id: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -15,6 +15,32 @@ export const NationalityModel = database.define("nationalities", {
     code: {
         type: DataTypes.STRING,
         allowNull: false,
+    },
+    type: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    class: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    level: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    board: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    is_competitor: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+    },
+    priority: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: 0,
     },
     hidden: {
         type: DataTypes.BOOLEAN,
@@ -43,6 +69,6 @@ export const NationalityModel = database.define("nationalities", {
             model: UserModel,
             key: "id",
         },
-    }
+    },
 });
-UserModel.hasMany(NationalityModel, { foreignKey: 'user_id', sourceKey: 'id' })
+UserModel.hasMany(CollegeModel, { foreignKey: "user_id", sourceKey: "id" });

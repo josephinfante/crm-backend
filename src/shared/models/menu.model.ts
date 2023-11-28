@@ -50,4 +50,4 @@ export const MenuModel = database.define("menus", {
 });
 MenuModel.hasOne(RoleModel, { foreignKey: "id", sourceKey: "role_id" });
 MenuModel.hasOne(PageModel, { foreignKey: "id", sourceKey: "page_id" });
-UserModel.hasMany(MenuModel, { foreignKey: "id", sourceKey: "user_id" });
+UserModel.hasMany(MenuModel, { foreignKey: "user_id", sourceKey: "id" });

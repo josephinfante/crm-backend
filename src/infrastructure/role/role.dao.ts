@@ -186,10 +186,6 @@ class RoleDao {
 
             const roles = await RoleModel.findAll({ where: [whereCondition, ListCondition(access)] });
 
-            if (!roles || roles.length === 0) {
-                throw new RoleError('No se encontraron roles.');
-            }
-
             const roleResponses: IRoleResponse[] = await Promise.all(
                 roles.map(async (role) => {
                     const pagesWithMenu = await FindPageWithMenu(access, role.dataValues.id);

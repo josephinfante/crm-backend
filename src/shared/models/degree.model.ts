@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { database } from "../connections/database/mysql";
 import { UserModel } from "./user.model";
 
-export const NationalityModel = database.define("nationalities", {
+export const DegreeModel = database.define("degrees", {
     id: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -42,7 +42,7 @@ export const NationalityModel = database.define("nationalities", {
         references: {
             model: UserModel,
             key: "id",
-        },
+        }
     }
 });
-UserModel.hasMany(NationalityModel, { foreignKey: 'user_id', sourceKey: 'id' })
+UserModel.hasMany(DegreeModel, { foreignKey: "user_id", sourceKey: "id"});

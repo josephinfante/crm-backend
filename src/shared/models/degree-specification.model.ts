@@ -1,8 +1,9 @@
 import { DataTypes } from "sequelize";
 import { database } from "../connections/database/mysql";
+import { DegreeModel } from "./degree.model";
 import { UserModel } from "./user.model";
 
-export const NationalityModel = database.define("nationalities", {
+export const DegreeSpecificationModel = database.define("degree_specifications", {
     id: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -36,6 +37,14 @@ export const NationalityModel = database.define("nationalities", {
         allowNull: false,
         defaultValue: Date.now(),
     },
+    degree_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        references: {
+            model: DegreeModel,
+            key: "id",
+        },
+    },
     user_id: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -45,4 +54,5 @@ export const NationalityModel = database.define("nationalities", {
         },
     }
 });
-UserModel.hasMany(NationalityModel, { foreignKey: 'user_id', sourceKey: 'id' })
+DegreeSpecificationModel.hasOne(DegreeModel, { foreignKey: "id", sourceKey: "degree_id" });
+UserModel.hasMany(DegreeSpecificationModel, { foreignKey: "user_id", sourceKey: "id" });

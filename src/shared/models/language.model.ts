@@ -43,4 +43,4 @@ export const LanguageModel = database.define("languages", {
         },
     }
 });
-UserModel.hasMany(LanguageModel, { foreignKey: 'id', sourceKey: 'user_id' })
+UserModel.hasMany(LanguageModel, { foreignKey: 'user_id', sourceKey: 'id' })

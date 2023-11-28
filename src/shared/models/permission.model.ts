@@ -71,4 +71,4 @@ export const PermissionModel = database.define("permissions", {
 });
 PermissionModel.hasOne(RoleModel, {foreignKey: 'id', sourceKey: 'role_id'});
 PermissionModel.hasOne(ComponentModel, {foreignKey: 'id', sourceKey: 'component_id'});
-UserModel.hasMany(PermissionModel, {foreignKey: 'id', sourceKey: 'user_id'});
+UserModel.hasMany(PermissionModel, {foreignKey: 'user_id', sourceKey: 'id'});

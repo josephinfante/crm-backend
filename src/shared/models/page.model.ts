@@ -51,4 +51,4 @@ export const PageModel = database.define("pages", {
         },
     }
 });
-UserModel.hasMany(PageModel, { foreignKey: "id", sourceKey: "user_id" });
+UserModel.hasMany(PageModel, { foreignKey: "user_id", sourceKey: "id" });

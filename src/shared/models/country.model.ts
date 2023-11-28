@@ -45,4 +45,4 @@ export const CountryModel = database.define("countries", {
         },
     }
 });
-UserModel.hasMany(CountryModel, { foreignKey: 'id', sourceKey: 'user_id' })
+UserModel.hasMany(CountryModel, { foreignKey: 'user_id', sourceKey: 'id' })

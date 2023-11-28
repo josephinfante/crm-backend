@@ -1,18 +1,28 @@
 import { DataTypes } from "sequelize";
 import { database } from "../connections/database/mysql";
+import { LanguageModel } from "./language.model";
+import { ContactModel } from "./contact.model";
 import { UserModel } from "./user.model";
 
-export const LanguageModel = database.define("languages", {
+export const ContactLanguageModel = database.define("contact_languages", {
     id: {
         type: DataTypes.STRING,
         allowNull: false,
         primaryKey: true,
     },
-    name: {
+    level: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    code: {
+    read: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    speak: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    listen: {
         type: DataTypes.STRING,
         allowNull: false,
     },
@@ -36,6 +46,22 @@ export const LanguageModel = database.define("languages", {
         allowNull: false,
         defaultValue: Date.now(),
     },
+    language_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        references: {
+            model: LanguageModel,
+            key: "id",
+        },
+    },
+    contact_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        references: {
+            model: ContactModel,
+            key: "id",
+        },
+    },
     user_id: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -45,4 +71,6 @@ export const LanguageModel = database.define("languages", {
         },
     }
 });
-UserModel.hasMany(LanguageModel, { foreignKey: 'user_id', sourceKey: 'id' })
+ContactLanguageModel.hasOne(LanguageModel, { foreignKey: "id", sourceKey: "language_id" });
+ContactLanguageModel.hasOne(ContactModel, { foreignKey: "id", sourceKey: "contact_id" });
+UserModel.hasMany(ContactLanguageModel, { foreignKey: "user_id", sourceKey: "id" });

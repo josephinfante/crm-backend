@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { database } from "../connections/database/mysql";
 import { UserModel } from "./user.model";
 
-export const LanguageModel = database.define("languages", {
+export const EthnicityModel = database.define("ethnicities", {
     id: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -45,4 +45,4 @@ export const LanguageModel = database.define("languages", {
         },
     }
 });
-UserModel.hasMany(LanguageModel, { foreignKey: 'user_id', sourceKey: 'id' })
+UserModel.hasMany(EthnicityModel, { foreignKey: "user_id", sourceKey: "id" });

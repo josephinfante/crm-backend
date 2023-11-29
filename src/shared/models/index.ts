@@ -17,4 +17,5 @@ export * from './page.model';
 export * from './permission.model';
 export * from './role.model';
 export * from './school.model';
+export * from './semester.model';
 export * from './user.model';

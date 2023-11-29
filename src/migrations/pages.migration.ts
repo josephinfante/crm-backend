@@ -34,7 +34,7 @@ async function pagesMigration() {
             createdAt: Date.now(),
             updatedAt: Date.now(),
         }));
-        PageModel.bulkCreate(pages).catch(_error => { throw new PageError('Ha ocurrido un error al tratar de insertar las páginas.') });
+        await PageModel.bulkCreate(pages).catch(_error => { throw new PageError('Ha ocurrido un error al tratar de insertar las páginas.') });
     } catch (error) {
         if (error instanceof Error && error.message) throw new PageError(error.message);
         else throw new Error('Ha ocurrido un error al tratar de insertar las páginas ejecutando la migración.');

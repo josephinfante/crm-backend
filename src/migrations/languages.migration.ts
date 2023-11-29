@@ -12,7 +12,7 @@ async function LanguageMigration() {
             createdAt: Date.now(),
             updatedAt: Date.now(),
         }));
-        LanguageModel.bulkCreate(languages).catch(_error => { throw new LanguageError('Ha ocurrido un error al tratar de insertar los idiomas.') });
+        await LanguageModel.bulkCreate(languages).catch(_error => { throw new LanguageError('Ha ocurrido un error al tratar de insertar los idiomas.') });
     } catch (error) {
         if (error instanceof Error && error.message) throw new LanguageError(error.message);
         else throw new Error('Ha ocurrido un error al tratar de insertar los idiomas ejecutando la migración.');

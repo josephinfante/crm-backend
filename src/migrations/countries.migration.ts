@@ -12,7 +12,7 @@ async function CountryMigration() {
             createdAt: Date.now(),
             updatedAt: Date.now(),
         }));
-        CountryModel.bulkCreate(countries).catch(_error => { throw new CountryError('Ha ocurrido un error al tratar de insertar los países.') });
+        await CountryModel.bulkCreate(countries).catch(_error => { throw new CountryError('Ha ocurrido un error al tratar de insertar los países.') });
     } catch (error) {
         if (error instanceof Error && error.message) throw new CountryError(error.message);
         else throw new Error('Ha ocurrido un error al tratar de insertar los países ejecutando la migración.');

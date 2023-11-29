@@ -2,9 +2,9 @@ import { Op, WhereOptions } from "sequelize";
 import { IAccessPermission } from "../../domain/auth/access.type";
 import { BusinessUnit } from "../../domain/business-unit/business-unit";
 import { BusinessUnitPresenter, IBusinessUnitResponse } from "../../interfaces/presenters/business-unit.presenter";
-import { BusinessUnitModel } from "../../shared/models/business-unit.model";
 import { UniqueID, ListCondition } from "../../shared/utils";
 import { BusinessUnitError } from "../../shared/errors";
+import { BusinessUnitModel } from "../../shared/models";
 
 class BusinessUnitDao {
     async create(access: IAccessPermission, business_unit: BusinessUnit): Promise<IBusinessUnitResponse> {

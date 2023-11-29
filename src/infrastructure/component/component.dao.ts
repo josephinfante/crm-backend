@@ -1,6 +1,6 @@
 import { Component } from "../../domain/component/component";
 import { ComponentError } from "../../shared/errors";
-import { ComponentModel } from "../../shared/models/component.model";
+import { ComponentModel } from "../../shared/models";
 
 export async function FindComponentById(id: string): Promise<Component> {
     try {

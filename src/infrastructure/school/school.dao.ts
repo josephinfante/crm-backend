@@ -3,9 +3,9 @@ import { IAccessPermission } from "../../domain/auth/access.type";
 import { School } from "../../domain/school/school";
 import { ISchoolResponse, SchoolPresenter } from "../../interfaces/presenters/school.presenter";
 import { SchoolError } from "../../shared/errors";
-import { SchoolModel } from "../../shared/models/school.model";
 import { UniqueID } from "../../shared/utils";
 import { CareerModel } from "../../shared/models/career.model";
+import { SchoolModel } from "../../shared/models";
 
 class SchoolDao {
     async create(access: IAccessPermission, school: School): Promise<ISchoolResponse> {
@@ -88,7 +88,7 @@ class SchoolDao {
 
             const updated = await school_exist.save()
                 .then(school => school)
-                .catch((_error) => { throw new SchoolError("Ha ocurrido un error al actualizar la escuela profesional.") });
+                .catch((_error) => { throw new SchoolError("Ha ocurrido un error al tratar de actualizar la escuela profesional.") });
 
             return SchoolPresenter(updated.dataValues, access);
         } catch (error) {
@@ -117,7 +117,7 @@ class SchoolDao {
                 updatedAt: Date.now(),
             });
 
-            await school_exist.save().catch((_error) => { throw new SchoolError("Ha ocurrido un error al eliminar la escuela profesional.") });
+            await school_exist.save().catch((_error) => { throw new SchoolError("Ha ocurrido un error al tratar de eliminar la escuela profesional.") });
             return `La escuela profesional ha sido eliminada. ${careers_affected ? `${careers_affected} carreras han sido afectadas.` : ""}`
         } catch (error) {
             if (error instanceof Error && error.message) throw new SchoolError(error.message);

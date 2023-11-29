@@ -16,6 +16,7 @@ import businessUnitRouter from "./application/business-unit/business-unit.routes
 import schoolRouter from "./application/school/school.routes";
 import campusRouter from "./application/campus/campus.routes";
 import semesterRouter from "./application/semester/semester.routes";
+import careerRouter from "./application/career/career.routes";
 
 export const app: Application = express();
 
@@ -49,6 +50,7 @@ app.use("/api", businessUnitRouter);
 app.use("/api", schoolRouter);
 app.use("/api", campusRouter);
 app.use("/api", semesterRouter);
+app.use("/api", careerRouter);
 app.use("/", (_req, res) => {
     res.status(200).json({message: "Welcome to the API"})
 });

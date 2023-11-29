@@ -32,7 +32,7 @@ class CampusDao {
                     defaults: new_campus,
                 })
                 .then(campus => campus)
-                .catch(_error => { throw new CampusError("Ha ocurrido un error al tratar de crear la sede")});
+                .catch(_error => { throw new CampusError("Ha ocurrido un error al tratar de crear la sede.")});
 
             if (!created) throw new CampusError("La sede ya existe.");
 

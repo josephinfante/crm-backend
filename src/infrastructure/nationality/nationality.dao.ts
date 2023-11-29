@@ -1,11 +1,10 @@
 import { Op, WhereOptions } from "sequelize";
 import { IAccessPermission } from "../../domain/auth/access.type";
 import { Nationality } from "../../domain/nationality/nationality";
-import { NationalityModel } from "../../shared/models";
+import { ContactLanguageModel, NationalityModel } from "../../shared/models";
 import { UniqueID, ListCondition } from "../../shared/utils";
 import { ContactDegreeError, NationalityError } from "../../shared/errors";
 import { INationalityResponse, NationalityPresenter } from "../../interfaces/presenters/nationality.presenter";
-import { ContactLanguageModel } from "../../shared/models/contact-language.model";
 
 class NationalityDao {
     async create(access: IAccessPermission, nationality: Nationality): Promise<INationalityResponse> {

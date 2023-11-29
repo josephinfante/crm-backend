@@ -4,9 +4,7 @@ import { Degree } from "../../domain/degree/degree";
 import { ListCondition, UniqueID } from "../../shared/utils";
 import { DegreeError, DegreeSpecificationError } from "../../shared/errors";
 import { DegreePresenter, IDegreeResponse } from "../../interfaces/presenters/degree.presenter";
-import { DegreeSpecificationModel } from "../../shared/models/degree-specification.model";
-import { ContactDegreeModel } from "../../shared/models/contact-degree.model";
-import { DegreeModel } from "../../shared/models";
+import { ContactDegreeModel, DegreeModel, DegreeSpecificationModel } from "../../shared/models";
 
 class DegreeDao {
     async create(access: IAccessPermission, degree: Degree): Promise<IDegreeResponse> {

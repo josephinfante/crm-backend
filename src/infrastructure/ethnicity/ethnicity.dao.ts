@@ -5,7 +5,7 @@ import { Ethnicity } from "../../domain/ethnicity/ethnicity";
 import { EthnicityPresenter, IEthnicityResponse } from "../../interfaces/presenters/ethnicity.presenter";
 import { EthnicityModel } from "../../shared/models/ethnicity.model";
 import { ContactDegreeError, EthnicityError } from "../../shared/errors";
-import { ContactLanguageModel } from "../../shared/models/contact-language.model";
+import { ContactLanguageModel } from "../../shared/models";
 
 class EthnicityDao {
     async create(access: IAccessPermission, ehtnicity: Ethnicity): Promise<IEthnicityResponse> {

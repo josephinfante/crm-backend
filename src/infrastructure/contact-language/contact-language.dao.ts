@@ -2,8 +2,8 @@ import { Op } from "sequelize";
 import { IAccessPermission } from "../../domain/auth/access.type";
 import { ContactLanguage } from "../../domain/contanct-language/contact-language";
 import { UniqueID } from "../../shared/utils";
-import { ContactLanguageModel } from "../../shared/models/contact-language.model";
 import { ContactLanguageError } from "../../shared/errors";
+import { ContactLanguageModel } from "../../shared/models";
 
 export async function CreateContactLanguage(access: IAccessPermission, contact_language: ContactLanguage) {
     try {

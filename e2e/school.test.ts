@@ -64,7 +64,6 @@ test.runIf(idDevelopment)("GET /api/v1/school", async function() {
         .get(`/api/v1/school/${school.business_unit_id}`)
         .set('x-user-token', user_token)
         .then(response => response.body);
-    console.log(response);
     expect(response).toStrictEqual(expect.any(Array));
 });
 

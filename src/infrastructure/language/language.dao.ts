@@ -45,7 +45,7 @@ class LanguageDao {
             const language_exist = access.super_admin === true ? 
                 await LanguageModel.findOne({ where: { id: id } })
                     .then(language => language)
-                    .catch((_error) => { throw new LanguageError("Ha ocurrido un error al revisar el idioma.") }).then(language => language) : 
+                    .catch((_error) => { throw new LanguageError("Ha ocurrido un error al revisar el idioma.") }) : 
                 await LanguageModel.findOne({ where: { id: id, user_id: access.user_id} })
                     .then(language => language)
                     .catch((_error) => { throw new LanguageError("Ha ocurrido un error al revisar el idioma.") });
@@ -72,8 +72,9 @@ class LanguageDao {
             if (language_coincidence.length > 0) throw new LanguageError("Ya existe un idioma con los datos proporcionados.");
 
             language_exist.set({
-                name: language.name,
-                code: language.code,
+                name: language.name ?? language_exist.dataValues.name,
+                code: language.code ?? language_exist.dataValues.code,
+                hidden: language.hidden ?? language_exist.dataValues.hidden,
                 updatedAt: Date.now(),
             });
             const updated = await language_exist.save()
@@ -91,7 +92,7 @@ class LanguageDao {
             const language_exist = access.super_admin === true ? 
                 await LanguageModel.findOne({ where: { id: id } })
                     .then(language => language)
-                    .catch((_error) => { throw new LanguageError("Ha ocurrido un error al revisar el idioma.") }).then(language => language) : 
+                    .catch((_error) => { throw new LanguageError("Ha ocurrido un error al revisar el idioma.") }) : 
                 await LanguageModel.findOne({ where: { id: id, user_id: access.user_id} })
                     .then(language => language)
                     .catch((_error) => { throw new LanguageError("Ha ocurrido un error al revisar el idioma.") });

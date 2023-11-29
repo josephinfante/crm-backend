@@ -14,7 +14,7 @@ export class LanguageRepositoryImpl implements LanguageRepository {
     delete(access: IAccessPermission, id: string): Promise<string> {
         return languageDao.delete(access, id)
     }
-    findAll(access: IAccessPermission, language?: string | undefined): Promise<ILanguageResponse[]> {
+    findAll(access: IAccessPermission, language?: string): Promise<ILanguageResponse[]> {
         return languageDao.findAll(access, language)
     }
 }

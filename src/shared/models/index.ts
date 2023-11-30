@@ -15,6 +15,7 @@ export * from './ethnicity.model';
 export * from './language.model';
 export * from './menu.model';
 export * from './nationality.model';
+export * from './opportunity.model';
 export * from './page.model';
 export * from './permission.model';
 export * from './role.model';

@@ -1,4 +1,5 @@
 export interface ICreateContactLanguage {
+    native: boolean;
     level: string;
     speak: string;
     read: string;

@@ -1,0 +1,74 @@
+import { IContact } from "./contact.type";
+
+export class Contact {
+    id: string;
+    first_name?: string;
+    last_name_1?: string;
+    last_name_2?: string;
+    mobile_number?: number;
+    phone_number?: number;
+    document_type?: string;
+    document_number?: string;
+    code?: string;
+    email_1?: string;
+    email_2?: string;
+    civil_status?: string;
+    gender?: string;
+    graduation_date?: Date;
+    whatsapp_number?: number;
+    facebook_id?: string;
+    instagram_id?: string;
+    zipcode?: string;
+    address?: string;
+    address_reference?: string;
+    native_language?: string;
+    accept_policies?: boolean;
+    accept_marketing?: boolean;
+    college_id?: string;
+    degree_specification_id?: string;
+    ethnicity_id?: string;
+    nationality_id?: string;
+    country_id?: string;
+    district_id?: string;
+    hidden: boolean;
+    deleted: boolean;
+    createdAt: number;
+    updatedAt: number;
+    user_id: string | null;
+
+    constructor(contact: IContact) {
+        this.id = contact.id;
+        this.first_name = contact.first_name;
+        this.last_name_1 = contact.last_name_1;
+        this.last_name_2 = contact.last_name_2;
+        this.mobile_number = contact.mobile_number;
+        this.phone_number = contact.phone_number;
+        this.document_type = contact.document_type;
+        this.document_number = contact.document_number;
+        this.code = contact.code;
+        this.email_1 = contact.email_1;
+        this.email_2 = contact.email_2;
+        this.civil_status = contact.civil_status;
+        this.gender = contact.gender;
+        this.graduation_date = contact.graduation_date;
+        this.whatsapp_number = contact.whatsapp_number;
+        this.facebook_id = contact.facebook_id;
+        this.instagram_id = contact.instagram_id;
+        this.zipcode = contact.zipcode;
+        this.address = contact.address;
+        this.address_reference = contact.address_reference;
+        this.accept_policies = contact.accept_policies;
+        this.accept_marketing = contact.accept_marketing;
+        this.college_id = contact.college_id;
+        this.degree_specification_id = contact.degree_specification_id;
+        this.ethnicity_id = contact.ethnicity_id;
+        this.nationality_id = contact.nationality_id;
+        this.country_id = contact.country_id;
+        this.district_id = contact.district_id;
+        this.hidden = contact.hidden;
+        this.deleted = contact.deleted;
+        this.createdAt = contact.createdAt;
+        this.updatedAt = contact.updatedAt;
+        this.user_id = contact.user_id;
+    }
+}

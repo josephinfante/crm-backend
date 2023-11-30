@@ -9,11 +9,8 @@ const login = {
     email: 'edmundoach@gmail.com',
     password: 'mypassword',
 }
-const country = {
-    name: `COUNTRY-NAME${Math.random().toString().slice(2, 10)}`,
-    code: `COUNTRY-CODE${Math.random().toString().slice(2, 10)}`,
-}
-let country_id: string = '';
+let state_id: string = '';
+let city_id: string = '';
 let user_token: string = '';
 
 test.runIf(idDevelopment)("POST /api/v1/login", async function() {
@@ -38,36 +35,18 @@ test.runIf(idDevelopment)("POST /api/v1/login", async function() {
     });
 });
 
-test.runIf(idDevelopment)("POST /api/v1/country", async function() {
+test.runIf(idDevelopment)("GET /api/v1/countries?country=:name", async function() {
     const response = await request.agent(app)
-        .post('/api/v1/country')
-        .set('x-user-token', user_token)
-        .send(country)
-        .then(response => response.body);
-    country_id = response.id;
-    expect(response).toStrictEqual({
-        id: expect.any(String),
-        name: country.name,
-        code: country.code,
-        hidden: false,
-        deleted: false,
-        updatedAt: expect.any(Number),
-        createdAt: expect.any(Number),
-    });
-});
-
-test.runIf(idDevelopment)("GET /api/v1/countries?country=:string", async function() {
-    const response = await request.agent(app)
-        .get(`/api/v1/countries?country=${country.name}`)
+        .get(`/api/v1/countries?country=Perú`)
         .set('x-user-token', user_token)
         .then(response => response.body);
-    expect(response).toStrictEqual(expect.any(Array));
+    expect(response).toStrictEqual(expect.any(Object));
 });
 
 
-test.runIf(idDevelopment)("GET /api/v1/countries?country=:string", async function() {
+test.runIf(idDevelopment)("GET /api/v1/countries?country=:code", async function() {
     const response = await request.agent(app)
-        .get(`/api/v1/countries?country=${country.code}`)
+        .get(`/api/v1/countries?country=PE`)
         .set('x-user-token', user_token)
         .then(response => response.body);
     expect(response).toStrictEqual(expect.any(Array));
@@ -81,27 +60,29 @@ test.runIf(idDevelopment)("GET /api/v1/countries", async function() {
     expect(response).toStrictEqual(expect.any(Array));
 });
 
-test.runIf(idDevelopment)("PUT /api/v1/country/:id", async function() {
+test.runIf(idDevelopment)("GET /api/v1/states", async function() {
     const response = await request.agent(app)
-        .put(`/api/v1/country/${country_id}`)
+        .get(`/api/v1/states`)
         .set('x-user-token', user_token)
-        .send({name: country.name, code: country.code})
         .then(response => response.body);
-    expect(response).toStrictEqual({
-        id: country_id,
-        name: country.name,
-        code: country.code,
-        hidden: false,
-        deleted: false,
-        updatedAt: expect.any(Number),
-        createdAt: expect.any(Number),
-    });
+    state_id = response[0].id;
+    expect(response).toStrictEqual(expect.any(Array));
 });
 
-test.runIf(idDevelopment)("DELETE /api/v1/country/:id", async function() {
+
+test.runIf(idDevelopment)("GET /api/v1/cities/:state_id", async function() {
     const response = await request.agent(app)
-        .delete(`/api/v1/country/${country_id}`)
+        .get(`/api/v1/cities/${state_id}`)
         .set('x-user-token', user_token)
         .then(response => response.body);
-    expect(response).toStrictEqual({ message: expect.any(String) });
+    city_id = response[0].id;
+    expect(response).toStrictEqual(expect.any(Array));
+});
+
+test.runIf(idDevelopment)("GET /api/v1/districts", async function() {
+    const response = await request.agent(app)
+        .get(`/api/v1/districts/${city_id}`)
+        .set('x-user-token', user_token)
+        .then(response => response.body);
+    expect(response).toStrictEqual(expect.any(Array));
 });

@@ -12,3 +12,6 @@ export const DB_HOST = process.env.DB_HOST ?? "localhost";
 export const DB_NAME = process.env.DB_NAME ?? "usat";
 export const DB_USERNAME = process.env.DB_USERNAME ?? "root";
 export const DB_PASSWORD = process.env.DB_PASSWORD ?? "";
+
+// GEOCODE
+export const GEOCODE_API_KEY = process.env.GEOCODE_API_KEY ?? "";

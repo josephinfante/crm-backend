@@ -12,7 +12,7 @@ async function NationalityMigration() {
             createdAt: Date.now(),
             updatedAt: Date.now(),
         }));
-        NationalityModel.bulkCreate(nationalities).catch(_error => { throw new NationalityError('Ha ocurrido un error al tratar de insertar las nacionalidades.') });
+        await NationalityModel.bulkCreate(nationalities).catch(_error => { throw new NationalityError('Ha ocurrido un error al tratar de insertar las nacionalidades.') });
     } catch (error) {
         if (error instanceof Error && error.message) throw new NationalityError(error.message);
         else throw new Error('Ha ocurrido un error al tratar de insertar las nacionalidades ejecutando la migración.');

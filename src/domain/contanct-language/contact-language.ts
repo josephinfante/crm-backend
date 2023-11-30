@@ -1,6 +1,8 @@
 import { IContactLanguage } from "./contact-language.type";
 
 export class ContactLanguage {
+    id: string;
+    native: boolean;
     level: string;
     speak: string;
     read: string;
@@ -13,6 +15,8 @@ export class ContactLanguage {
     contact_id: string;
     user_id: string | null;
     constructor(contact_language: IContactLanguage) {
+        this.id = contact_language.id;
+        this.native = contact_language.native;
         this.level = contact_language.level;
         this.speak = contact_language.speak;
         this.read = contact_language.read;

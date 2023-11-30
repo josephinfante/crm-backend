@@ -158,3 +158,24 @@ export class CountryError extends Error {
         this.name = 'CountryError';
     }
 }
+
+export class StateError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'StateError';
+    }
+}
+
+export class CityError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'CityError';
+    }
+}
+
+export class DistrictError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'DistrictError';
+    }
+}

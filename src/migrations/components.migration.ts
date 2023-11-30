@@ -36,7 +36,7 @@ async function ComponentsMigration() {
             createdAt: Date.now(),
             updatedAt: Date.now(),
         }));
-        ComponentModel.bulkCreate(components).catch(_error => { throw new ComponentError('Ha ocurrido un error al tratar de insertar los componentes.') });
+        await ComponentModel.bulkCreate(components).catch(_error => { throw new ComponentError('Ha ocurrido un error al tratar de insertar los componentes.') });
     } catch (error) {
         if (error instanceof Error && error.message) throw new ComponentError(error.message);
         else throw new Error('Ha ocurrido un error al tratar de insertar los componentes ejecutando la migración.');

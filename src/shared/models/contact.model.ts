@@ -1,5 +1,11 @@
 import { DataTypes } from "sequelize";
 import { database } from "../connections/database/mysql";
+import { UserModel } from "./user.model";
+import { CollegeModel } from "./college.model";
+import { DegreeSpecificationModel } from "./degree-specification.model";
+import { EthnicityModel } from "./ethnicity.model";
+import { NationalityModel } from "./nationality.model";
+import { CountryModel } from "./country.model";
 
 export const ContactModel = database.define("contacts", {
     id: {
@@ -74,7 +80,7 @@ export const ContactModel = database.define("contacts", {
         allowNull: true,
     },
     zipcode: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: true,
     },
     address: {
@@ -85,10 +91,6 @@ export const ContactModel = database.define("contacts", {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    native_language: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
     accept_policies: {
         type: DataTypes.BOOLEAN,
         allowNull: true,
@@ -96,6 +98,16 @@ export const ContactModel = database.define("contacts", {
     accept_marketing: {
         type: DataTypes.BOOLEAN,
         allowNull: true,
+    },
+    hidden: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: false,
+    },
+    deleted: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: false,
     },
     updatedAt: {
         type: DataTypes.BIGINT,
@@ -110,22 +122,42 @@ export const ContactModel = database.define("contacts", {
     college_id: {
         type: DataTypes.STRING,
         allowNull: true,
+        references: {
+            model: CollegeModel,
+            key: "id",
+        },
     },
     degree_specification_id: {
         type: DataTypes.STRING,
         allowNull: true,
+        references: {
+            model: DegreeSpecificationModel,
+            key: "id",
+        },
     },
     ethnicity_id: {
         type: DataTypes.STRING,
         allowNull: true,
+        references: {
+            model: EthnicityModel,
+            key: "id",
+        },
     },
     nationality_id: {
         type: DataTypes.STRING,
         allowNull: true,
+        references: {
+            model: NationalityModel,
+            key: "id",
+        },
     },
     country_id: {
         type: DataTypes.STRING,
         allowNull: true,
+        references: {
+            model: CountryModel,
+            key: "id",
+        },
     },
     district_id: {
         type: DataTypes.STRING,
@@ -134,5 +166,10 @@ export const ContactModel = database.define("contacts", {
     user_id: {
         type: DataTypes.STRING,
         allowNull: true,
+        references: {
+            model: UserModel,
+            key: "id",
+        },
     },
 });
+UserModel.hasMany(ContactModel, { foreignKey: "user_id", sourceKey: "id" });

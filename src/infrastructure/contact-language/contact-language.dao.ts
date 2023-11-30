@@ -3,12 +3,20 @@ import { IAccessPermission } from "../../domain/auth/access.type";
 import { ContactLanguage } from "../../domain/contanct-language/contact-language";
 import { UniqueID } from "../../shared/utils";
 import { ContactLanguageError } from "../../shared/errors";
-import { ContactLanguageModel } from "../../shared/models";
+import { ContactLanguageModel, LanguageModel } from "../../shared/models";
+import { ContactLanguagePresenter } from "../../interfaces/presenters/contact-language.presenter";
+import { ICreateContactLanguage } from "../../domain/contanct-language/contact-language.type";
 
-export async function CreateContactLanguage(access: IAccessPermission, contact_language: ContactLanguage) {
+export async function CreateContactLanguage(access: IAccessPermission, contact_language: ICreateContactLanguage) {
     try {
+        const language_exist = await LanguageModel.findByPk(contact_language.language_id)
+            .then(language => language)
+            .catch((_error) => { throw new ContactLanguageError("Ha ocurrido un error al revisar el idioma.") });
+        if (!language_exist) throw new ContactLanguageError("El idioma no existe.");
+
         const new_contact_language = {
             id: UniqueID.generate(),
+            native: contact_language.native,
             level: contact_language.level,
             read: contact_language.read,
             speak: contact_language.speak,
@@ -32,8 +40,9 @@ export async function CreateContactLanguage(access: IAccessPermission, contact_l
                 defaults: new_contact_language
             })
             .then(contact_language => contact_language)
-            .catch((_error) => { throw new ContactLanguageError("Ha ocurrido un error al tratar de crear el idioma del contacto.") });
+            .catch((_error) => { throw new ContactLanguageError(_error.message??"Ha ocurrido un error al tratar de crear el idioma del contacto.") });
         if (!created) throw new ContactLanguageError('El idioma del contacto con los datos proporcionados ya existe.');
+        return ContactLanguagePresenter(new_contact_language, language_exist.dataValues);
     } catch (error) {
         if (error instanceof Error && error.message) throw new ContactLanguageError(error.message);
         else throw new Error("Ha ocurrido un error al crear el idioma del contacto.");
@@ -71,5 +80,21 @@ export async function UpdateContactLanguage(access: IAccessPermission, contact_l
     } catch (error) {
         if (error instanceof Error && error.message) throw new ContactLanguageError(error.message);
         else throw new Error("Ha ocurrido un error al actualizar el idioma del contacto.");
+    }
+}
+
+export async function FindLanguagesByContactId(contact_id: string) {
+    try {
+        const contact_languages = await ContactLanguageModel.findAll({ 
+                where: { contact_id: contact_id },
+                include: [{ model: LanguageModel }]
+            })
+            .then(contact_languages => contact_languages)
+            .catch((_error) => { throw new ContactLanguageError("Ha ocurrido un error al revisar los idiomas del contacto.") });
+
+        return contact_languages.map(contact_language => ContactLanguagePresenter(contact_language.dataValues, contact_language.dataValues.language.dataValues));
+    } catch (error) {
+        if (error instanceof Error && error.message) throw new ContactLanguageError(error.message);
+        else throw new Error("Ha ocurrido un error al buscar los idiomas del contacto.");
     }
 }

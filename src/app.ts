@@ -17,6 +17,10 @@ import schoolRouter from "./application/school/school.routes";
 import campusRouter from "./application/campus/campus.routes";
 import semesterRouter from "./application/semester/semester.routes";
 import careerRouter from "./application/career/career.routes";
+import stateRouter from "./application/state/state.routes";
+import cityRouter from "./application/city/city.routes";
+import districtRouter from "./application/district/district.routes";
+import contactRouter from "./application/contact/contact.routes";
 
 export const app: Application = express();
 
@@ -51,6 +55,10 @@ app.use("/api", schoolRouter);
 app.use("/api", campusRouter);
 app.use("/api", semesterRouter);
 app.use("/api", careerRouter);
+app.use("/api", stateRouter);
+app.use("/api", cityRouter);
+app.use("/api", districtRouter);
+app.use("/api", contactRouter);
 app.use("/", (_req, res) => {
     res.status(200).json({message: "Welcome to the API"})
 });

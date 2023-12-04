@@ -17,4 +17,7 @@ export class SchoolRepositoryImpl implements SchoolRepository {
     findByBusinessUnitId(access: IAccessPermission, business_unit_id: string): Promise<ISchoolResponse[]> {
         return schoolDao.findByBusinessUnitId(access, business_unit_id);
     }
+    findAll(access: IAccessPermission): Promise<ISchoolResponse[]> {
+        return schoolDao.findAll(access);
+    }
 }

@@ -13,4 +13,5 @@ schoolRouter.post("/v1/school", Access.canCreate('school'), schoolController.cre
 schoolRouter.put("/v1/school/:id", Access.canUpdate('school'), schoolController.update.bind(schoolController));
 schoolRouter.delete("/v1/school/:id", Access.canDelete('school'), schoolController.delete.bind(schoolController));
 schoolRouter.get("/v1/school/:business_unit_id", Access.canRead('school'), schoolController.findByBusinessUnitId.bind(schoolController));
+schoolRouter.get("/v1/schools", Access.canRead('school'), schoolController.findAll.bind(schoolController));
 export default schoolRouter;

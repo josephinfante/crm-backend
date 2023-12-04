@@ -7,4 +7,5 @@ export interface SchoolRepository {
     update(access: IAccessPermission, id: string, school: School): Promise<ISchoolResponse>;
     delete(access: IAccessPermission, id: string): Promise<string | void>;
     findByBusinessUnitId(access: IAccessPermission, business_unit_id: string): Promise<ISchoolResponse[]>;
+    findAll(access: IAccessPermission): Promise<ISchoolResponse[]>;
 }

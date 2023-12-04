@@ -3,9 +3,9 @@ import { IAccessPermission } from "../../domain/auth/access.type";
 import { School } from "../../domain/school/school";
 import { ISchoolResponse, SchoolPresenter } from "../../interfaces/presenters/school.presenter";
 import { SchoolError } from "../../shared/errors";
-import { UniqueID } from "../../shared/utils";
+import { ListCondition, UniqueID } from "../../shared/utils";
 import { CareerModel } from "../../shared/models/career.model";
-import { SchoolModel } from "../../shared/models";
+import { BusinessUnitModel, SchoolModel } from "../../shared/models";
 
 class SchoolDao {
     async create(access: IAccessPermission, school: School): Promise<ISchoolResponse> {
@@ -130,11 +130,40 @@ class SchoolDao {
                 await SchoolModel.findAll({ where: { business_unit_id: business_unit_id } })
                     .then(schools => schools)
                     .catch((_error) => { throw new SchoolError("Ha ocurrido un error al obtener las escuelas profesionales.") }) :
-                await SchoolModel.findAll({ where: { business_unit_id: business_unit_id, user_id: access.user_id } })
+                await SchoolModel.findAll({ 
+                        where: [
+                            { business_unit_id: business_unit_id, user_id: access.user_id },
+                            ListCondition(access)
+                        ]
+                    })
                     .then(schools => schools)
                     .catch((_error) => { throw new SchoolError("Ha ocurrido un error al obtener las escuelas profesionales.") });
 
             return schools.map(school => SchoolPresenter(school.dataValues, access));
+        } catch (error) {
+            if (error instanceof Error && error.message) throw new SchoolError(error.message);
+            else throw new Error("Ha ocurrido un error al obtener las escuelas profesionales.");
+        }
+    }
+    async findAll(access: IAccessPermission): Promise<ISchoolResponse[]> {
+        try {
+            const schools = access.super_admin === true ? 
+                await SchoolModel.findAll({
+                        include: [{ model: BusinessUnitModel }]
+                    })
+                    .then(schools => schools)
+                    .catch((_error) => { throw new SchoolError("Ha ocurrido un error al obtener las escuelas profesionales.") }) :
+                await SchoolModel.findAll({ 
+                        where: [
+                            { user_id: access.user_id },
+                            ListCondition(access)
+                        ],
+                        include: [{ model: BusinessUnitModel }]
+                    })
+                    .then(schools => schools)
+                    .catch((_error) => { throw new SchoolError("Ha ocurrido un error al obtener las escuelas profesionales.") });
+
+            return schools.map(school => SchoolPresenter(school.dataValues, access, school.dataValues.business_unit));
         } catch (error) {
             if (error instanceof Error && error.message) throw new SchoolError(error.message);
             else throw new Error("Ha ocurrido un error al obtener las escuelas profesionales.");

@@ -13,4 +13,5 @@ careerRouter.post("/v1/career", Access.canCreate('career'), careerController.cre
 careerRouter.put("/v1/career/:id", Access.canUpdate('career'), careerController.update.bind(careerController));
 careerRouter.delete("/v1/career/:id", Access.canDelete('career'), careerController.delete.bind(careerController));
 careerRouter.get("/v1/career/:school_id", Access.canRead('career'), careerController.findBySchoolId.bind(careerController));
+careerRouter.get("/v1/careers", Access.canRead('career'), careerController.findAll.bind(careerController));
 export default careerRouter;

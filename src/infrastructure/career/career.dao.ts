@@ -1,10 +1,10 @@
 import { Op } from "sequelize";
 import { IAccessPermission } from "../../domain/auth/access.type";
-import { UniqueID } from "../../shared/utils";
+import { ListCondition, UniqueID } from "../../shared/utils";
 import { CareerPresenter, ICareerResponse } from "../../interfaces/presenters/career.presenter";
 import { Career } from "../../domain/career/career";
 import { CareerError } from "../../shared/errors";
-import { CareerModel } from "../../shared/models";
+import { CareerModel, SchoolModel } from "../../shared/models";
 
 class CareerDao {
     async create(access: IAccessPermission, career: Career): Promise<ICareerResponse> {
@@ -72,9 +72,9 @@ class CareerDao {
                         }
                     })
                     .then(careers => careers)
-                    .catch((_error) => { throw new CareerError("Ha ocurrido un error al revisar las sedes.") }) : [];
+                    .catch((_error) => { throw new CareerError("Ha ocurrido un error al revisar las carreras.") }) : [];
 
-            if (career_coincidence.length > 0) throw new CareerError("Ya existe una sede con los datos proporcionados.");
+            if (career_coincidence.length > 0) throw new CareerError("Ya existe una carrera con los datos proporcionados.");
 
             career_exist.set({
                 name: career.name ?? career_exist.dataValues.name,
@@ -123,15 +123,44 @@ class CareerDao {
             const careers = access.super_admin === true ? 
                 await CareerModel.findAll({ where: { school_id: school_id } })
                     .then(careers => careers)
-                    .catch((_error) => { throw new CareerError("Ha ocurrido un error al obtener las sedes.") }) :
-                await CareerModel.findAll({ where: { school_id: school_id, user_id: access.user_id } })
+                    .catch((_error) => { throw new CareerError("Ha ocurrido un error al tratar de obtener las carreras.") }) :
+                await CareerModel.findAll({ 
+                        where: [
+                            { school_id: school_id, user_id: access.user_id },
+                            ListCondition(access),
+                        ]
+                    })
                     .then(careers => careers)
-                    .catch((_error) => { throw new CareerError("Ha ocurrido un error al obtener las sedes.") });
+                    .catch((_error) => { throw new CareerError("Ha ocurrido un error al tratar de obtener las carreras.") });
 
             return careers.map(career => CareerPresenter(career.dataValues, access));
         } catch (error) {
             if (error instanceof Error && error.message) throw new CareerError(error.message);
-            else throw new Error("Ha ocurrido un error al obtener las sedes.");
+            else throw new Error("Ha ocurrido un error al obtener las carreras.");
+        }
+    }
+    async findAll(access: IAccessPermission): Promise<ICareerResponse[]> {
+        try {
+            const careers = access.super_admin === true ? 
+                await CareerModel.findAll({
+                        include: [{ model: SchoolModel }]
+                    })
+                    .then(careers => careers)
+                    .catch((_error) => { throw new CareerError(_error.message??"Ha ocurrido un error al tratar de obtener las carreras.") }) :
+                await CareerModel.findAll({ 
+                        where: [
+                            { user_id: access.user_id },
+                            ListCondition(access),
+                        ],
+                        include: [{ model: SchoolModel }]
+                    })
+                    .then(careers => careers)
+                    .catch((_error) => { throw new CareerError("Ha ocurrido un error al tratar de obtener las carreras.") });
+
+            return careers.map(career => CareerPresenter(career.dataValues, access, career.dataValues.school));
+        } catch (error) {
+            if (error instanceof Error && error.message) throw new CareerError(error.message);
+            else throw new Error("Ha ocurrido un error al obtener las carreras.");
         }
     }
 }

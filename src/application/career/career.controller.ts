@@ -43,4 +43,13 @@ export class CareerController {
             else res.status(500).json({error: 'Ha ocurrido un error al obtener las carreras.'});
         }
     }
+    async findAll(_req: Request, res: Response) {
+        try {
+            const careers = await this.career.findAll(res.locals.access);
+            res.status(200).json(careers);
+        } catch (error) {
+            if (error instanceof CareerError) res.status(400).json({error: error.message});
+            else res.status(500).json({error: 'Ha ocurrido un error al obtener las carreras.'});
+        }
+    }
 }

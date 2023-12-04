@@ -7,4 +7,5 @@ export interface CareerRepository {
     update(access: IAccessPermission, id: string, career: Career): Promise<ICareerResponse>;
     delete(access: IAccessPermission, id: string): Promise<string | void>;
     findBySchoolId(access: IAccessPermission, school_id: string): Promise<ICareerResponse[]>;
+    findAll(access: IAccessPermission): Promise<ICareerResponse[]>;
 }

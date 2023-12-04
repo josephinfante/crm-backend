@@ -13,4 +13,5 @@ semesterRouter.post("/v1/semester", Access.canCreate('semester'), semesterContro
 semesterRouter.put("/v1/semester/:id", Access.canUpdate('semester'), semesterController.update.bind(semesterController));
 semesterRouter.delete("/v1/semester/:id", Access.canDelete('semester'), semesterController.delete.bind(semesterController));
 semesterRouter.get("/v1/semester/:business_unit_id", Access.canRead('semester'), semesterController.findByBusinessUnitId.bind(semesterController));
+semesterRouter.get("/v1/semesters", Access.canRead('semester'), semesterController.findAll.bind(semesterController));
 export default semesterRouter;

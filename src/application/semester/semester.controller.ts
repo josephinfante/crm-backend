@@ -43,4 +43,13 @@ export class SemesterController {
             else res.status(500).json({error: 'Ha ocurrido un error al obtener los semestres académicos.'});
         }
     }
+    async findAll(_req: Request, res: Response) {
+        try {
+            const semesters = await this.semester.findAll(res.locals.access);
+            res.status(200).json(semesters);
+        } catch (error) {
+            if (error instanceof SemesterError) res.status(400).json({error: error.message});
+            else res.status(500).json({error: 'Ha ocurrido un error al obtener los semestres académicos.'});
+        }
+    }
 }

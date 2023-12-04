@@ -58,5 +58,5 @@ export const SemesterModel = database.define("semesters", {
         },
     }
 });
-BusinessUnitModel.hasMany(SemesterModel, { foreignKey: 'business_unit_id', sourceKey: 'id' });
+SemesterModel.hasOne(BusinessUnitModel, { foreignKey: 'id', sourceKey: 'business_unit_id' });
 UserModel.hasMany(SemesterModel, { foreignKey: 'user_id', sourceKey: 'id' });

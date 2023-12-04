@@ -17,4 +17,7 @@ export class SemesterCrudUseCase {
     async findByBusinessUnitId(access: IAccessPermission, business_unit_id: string): Promise<ISemesterResponse[]> {
         return this.semesterRepository.findByBusinessUnitId(access, business_unit_id);
     }
+    async findAll(access: IAccessPermission): Promise<ISemesterResponse[]> {
+        return this.semesterRepository.findAll(access);
+    }
 }

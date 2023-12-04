@@ -1,9 +1,9 @@
 import { Op } from "sequelize";
 import { IAccessPermission } from "../../domain/auth/access.type";
-import { UniqueID } from "../../shared/utils";
+import { ListCondition, UniqueID } from "../../shared/utils";
 import { ISemesterResponse, SemesterPresenter } from "../../interfaces/presenters/semester.presenter";
 import { Semester } from "../../domain/semester/semester";
-import { SemesterModel } from "../../shared/models";
+import { BusinessUnitModel, SemesterModel } from "../../shared/models";
 import { SemesterError } from "../../shared/errors";
 
 class SemesterDao {
@@ -72,7 +72,7 @@ class SemesterDao {
                         }
                     })
                     .then(semesters => semesters)
-                    .catch((_error) => { throw new SemesterError("Ha ocurrido un error al revisar las sedes.") }) : [];
+                    .catch((_error) => { throw new SemesterError("Ha ocurrido un error al revisar los semestres académicos.") }) : [];
 
             if (semester_coincidence.length > 0) throw new SemesterError("Ya existe una sede con los datos proporcionados.");
 
@@ -123,15 +123,44 @@ class SemesterDao {
             const semesters = access.super_admin === true ? 
                 await SemesterModel.findAll({ where: { business_unit_id: business_unit_id } })
                     .then(semesters => semesters)
-                    .catch((_error) => { throw new SemesterError("Ha ocurrido un error al obtener las sedes.") }) :
-                await SemesterModel.findAll({ where: { business_unit_id: business_unit_id, user_id: access.user_id } })
+                    .catch((_error) => { throw new SemesterError("Ha ocurrido un error al obtener los semestres académicos.") }) :
+                await SemesterModel.findAll({ 
+                        where: [
+                            { business_unit_id: business_unit_id, user_id: access.user_id },
+                            ListCondition(access)
+                        ]
+                    })
                     .then(semesters => semesters)
-                    .catch((_error) => { throw new SemesterError("Ha ocurrido un error al obtener las sedes.") });
+                    .catch((_error) => { throw new SemesterError("Ha ocurrido un error al obtener los semestres académicos.") });
 
             return semesters.map(semester => SemesterPresenter(semester.dataValues, access));
         } catch (error) {
             if (error instanceof Error && error.message) throw new SemesterError(error.message);
-            else throw new Error("Ha ocurrido un error al obtener las sedes.");
+            else throw new Error("Ha ocurrido un error al obtener los semestres académicos.");
+        }
+    }
+    async findAll(access: IAccessPermission): Promise<ISemesterResponse[]> {
+        try {
+            const semesters = access.super_admin === true ? 
+                await SemesterModel.findAll({
+                        include: [{ model: BusinessUnitModel }]
+                    })
+                    .then(semesters => semesters)
+                    .catch((_error) => { throw new SemesterError("Ha ocurrido un error al obtener los semestres académicos.") }) :
+                await SemesterModel.findAll({ 
+                        where: [
+                            { user_id: access.user_id },
+                            ListCondition(access)
+                        ],
+                        include: [{ model: BusinessUnitModel }]
+                    })
+                    .then(semesters => semesters)
+                    .catch((_error) => { throw new SemesterError("Ha ocurrido un error al obtener los semestres académicos.") });
+
+            return semesters.map(semester => SemesterPresenter(semester.dataValues, access, semester.dataValues.business_unit));
+        } catch (error) {
+            if (error instanceof Error && error.message) throw new SemesterError(error.message);
+            else throw new Error("Ha ocurrido un error al obtener los semestres académicos.");
         }
     }
 }

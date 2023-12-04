@@ -7,4 +7,5 @@ export interface SemesterRepository {
     update(access: IAccessPermission, id: string, semester: Semester): Promise<ISemesterResponse>;
     delete(access: IAccessPermission, id: string): Promise<string | void>;
     findByBusinessUnitId(access: IAccessPermission, business_unit_id: string): Promise<ISemesterResponse[]>;
+    findAll(access: IAccessPermission): Promise<ISemesterResponse[]>;
 }

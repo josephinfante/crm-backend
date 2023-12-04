@@ -17,4 +17,7 @@ export class SemesterRepositoryImpl implements SemesterRepository {
     findByBusinessUnitId(access: IAccessPermission, business_unit_id: string): Promise<ISemesterResponse[]> {
         return semesterDao.findByBusinessUnitId(access, business_unit_id);
     }
+    findAll(access: IAccessPermission): Promise<ISemesterResponse[]> {
+        return semesterDao.findAll(access);
+    }
 }

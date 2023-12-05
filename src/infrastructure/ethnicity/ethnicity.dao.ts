@@ -138,8 +138,8 @@ class EthnicityDao {
                 where: {
                     ...whereCondition,
                     ...nameOrCodeCondition,
+                    ...ListCondition(access),
                 },
-                ...ListCondition(access),
             });
 
             return ethnicities.map(ethnicity => EthnicityPresenter(ethnicity.dataValues, access));

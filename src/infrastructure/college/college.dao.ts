@@ -158,8 +158,8 @@ class CollegeDao {
                 where: {
                     ...whereCondition,
                     ...nameOrCodeCondition,
+                    ...ListCondition(access),
                 },
-                ...ListCondition(access),
             });
 
             return colleges.map(college => CollegePresenter(college.dataValues, access));

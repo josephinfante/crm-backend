@@ -9,13 +9,13 @@ const login = {
     email: 'edmundoach@gmail.com',
     password: 'mypassword',
 }
-const semester = {
-    name: `SEMESTER-NAME${Math.random().toString().slice(2, 10)}`,
-    nickname: `SEMESTER-NICKNAME${Math.random().toString().slice(2, 10)}`,
-    code: `SEMESTER-CODE${Math.random().toString().slice(2, 10)}`,
+const period = {
+    name: `PERIOD-NAME${Math.random().toString().slice(2, 10)}`,
+    nickname: `PERIOD-NICKNAME${Math.random().toString().slice(2, 10)}`,
+    code: `PERIOD-CODE${Math.random().toString().slice(2, 10)}`,
     business_unit_id: '65669279-ccdc-e51d-a1017e10',
 }
-let semester_id: string = '';
+let period_id: string = '';
 let user_token: string = '';
 
 test.runIf(idDevelopment)("POST /api/v1/login", async function() {
@@ -40,18 +40,22 @@ test.runIf(idDevelopment)("POST /api/v1/login", async function() {
     });
 });
 
-test.runIf(idDevelopment)("POST /api/v1/semester", async function() {
+test.runIf(idDevelopment)("POST /api/v1/period", async function() {
     const response = await request.agent(app)
-        .post('/api/v1/semester')
+        .post('/api/v1/period')
         .set('x-user-token', user_token)
-        .send(semester)
+        .send(period)
         .then(response => response.body);
-    semester_id = response.id;
+    period_id = response.id;
     expect(response).toStrictEqual({
         id: expect.any(String),
-        name: semester.name,
-        nickname: semester.nickname,
-        code: semester.code,
+        name: period.name,
+        nickname: period.nickname,
+        code: period.code,
+        business_unit: {
+            id: expect.any(String),
+            name: expect.any(String),
+        },
         hidden: expect.any(Boolean),
         deleted: expect.any(Boolean),
         updatedAt: expect.any(Number),
@@ -59,25 +63,29 @@ test.runIf(idDevelopment)("POST /api/v1/semester", async function() {
     });
 });
 
-test.runIf(idDevelopment)("GET /api/v1/semester", async function() {
+test.runIf(idDevelopment)("GET /api/v1/period", async function() {
     const response = await request.agent(app)
-        .get(`/api/v1/semester/${semester.business_unit_id}`)
+        .get(`/api/v1/period/${period.business_unit_id}`)
         .set('x-user-token', user_token)
         .then(response => response.body);
     expect(response).toStrictEqual(expect.any(Array));
 });
 
-test.runIf(idDevelopment)("PUT /api/v1/semester/:id", async function() {
+test.runIf(idDevelopment)("PUT /api/v1/period/:id", async function() {
     const response = await request.agent(app)
-        .put(`/api/v1/semester/${semester_id}`)
+        .put(`/api/v1/period/${period_id}`)
         .set('x-user-token', user_token)
-        .send(semester)
+        .send(period)
         .then(response => response.body);
     expect(response).toStrictEqual({
-        id: semester_id,
-        name: semester.name,
-        nickname: semester.nickname,
-        code: semester.code,
+        id: period_id,
+        name: period.name,
+        nickname: period.nickname,
+        code: period.code,
+        business_unit: {
+            id: expect.any(String),
+            name: expect.any(String),
+        },
         hidden: expect.any(Boolean),
         deleted: expect.any(Boolean),
         updatedAt: expect.any(Number),
@@ -85,9 +93,9 @@ test.runIf(idDevelopment)("PUT /api/v1/semester/:id", async function() {
     });
 });
 
-test.runIf(idDevelopment)("DELETE /api/v1/semester/:id", async function() {
+test.runIf(idDevelopment)("DELETE /api/v1/period/:id", async function() {
     await request.agent(app)
-        .delete(`/api/v1/semester/${semester_id}`)
+        .delete(`/api/v1/period/${period_id}`)
         .set('x-user-token', user_token)
         .expect(204);
 });

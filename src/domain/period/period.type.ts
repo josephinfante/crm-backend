@@ -1,15 +1,15 @@
-export interface ICreateSemester {
+export interface ICreatePeriod {
     name: string,
     nickname: string,
     code: string,
     business_unit_id: string
 }
 
-export interface IUpdateSemester extends ICreateSemester {
+export interface IUpdatePeriod extends ICreatePeriod {
     hidden: boolean,
 }
 
-export interface ISemester extends ICreateSemester {
+export interface IPeriod extends ICreatePeriod {
     id: string,
     hidden: boolean,
     deleted: boolean,

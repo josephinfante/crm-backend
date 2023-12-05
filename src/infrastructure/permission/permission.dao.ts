@@ -30,23 +30,23 @@ export async function CreatePermission(access: IAccessPermission, role_id: strin
 
 export async function UpdatePermission(access: IAccessPermission, role_id: string, component_id: string, permissions: ICreatePermission) {
     try {
-        const permission = access.super_admin === true ? 
-            await PermissionModel.findOne({ where: { role_id: role_id, component_id: component_id } })
-                .then(permission_exists => permission_exists)
-                .catch((_error) => {throw new PermissionError('Ha ocurrido un error al tratar de buscar el permiso.')}) :
-            await PermissionModel.findOne({ where: { role_id: role_id, component_id: component_id, user_id: access.user_id } })
-                .then(permission_exists => permission_exists)
-                .catch((_error) => {throw new PermissionError('Ha ocurrido un error al tratar de buscar el permiso.')});
-
-        if (permission) {
-            await permission.destroy()
-                .catch((_error) => {throw new PermissionError('Ha ocurrido un error al tratar de eliminar el permiso.')});
-
-            await CreatePermission(access, role_id, component_id, permissions);
-        } 
+        await CreatePermission(access, role_id, component_id, permissions);
     } catch (error) {
         if (error instanceof Error && error.message) throw new PermissionError(error.message);
         else throw new Error('Ha ocurrido un error al actualizar el permiso.');
+    }
+}
+
+export async function DeletePermission(access: IAccessPermission, role_id: string) {
+    try {
+        access.super_admin === true ? 
+            await PermissionModel.destroy({ where: { role_id: role_id } })
+                .catch((_error) => {throw new PermissionError('Ha ocurrido un error al tratar eliminar los permisos.')}) :
+            await PermissionModel.destroy({ where: { role_id: role_id, user_id: access.user_id } })
+                .catch((_error) => {throw new PermissionError('Ha ocurrido un error al tratar eliminar los permisos.')});
+    } catch (error) {
+        if (error instanceof Error && error.message) throw new PermissionError(error.message);
+        else throw new Error('Ha ocurrido un error al eliminar los permisos.');
     }
 }
 

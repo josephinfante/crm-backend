@@ -68,10 +68,10 @@ export class CampusError extends Error {
     }
 }
 
-export class SemesterError extends Error {
+export class PeriodError extends Error {
     constructor(message: string) {
         super(message);
-        this.name = 'SemesterError';
+        this.name = 'PeriodError';
     }
 }
 
@@ -177,5 +177,33 @@ export class DistrictError extends Error {
     constructor(message: string) {
         super(message);
         this.name = 'DistrictError';
+    }
+}
+
+export class ContactChannelDetailError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'ContactChannelDetailError';
+    }
+}
+
+export class TrackingClassificationError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'TrackingClassificationError';
+    }
+}
+
+export class TrackingClassificationActionError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'TrackingClassificationActionError';
+    }
+}
+
+export class SalePhaseError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'SalePhaseError';
     }
 }

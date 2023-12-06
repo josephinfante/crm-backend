@@ -1,19 +1,14 @@
 import { DataTypes } from "sequelize";
 import { database } from "../connections/database/mysql";
-import { BusinessUnitModel } from "./business-unit.model";
 import { UserModel } from "./user.model";
 
-export const CampusModel = database.define("campuses", {
+export const SalePhaseModel = database.define("sale_phases", {
     id: {
         type: DataTypes.STRING,
         allowNull: false,
         primaryKey: true,
     },
     name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    nickname: {
         type: DataTypes.STRING,
         allowNull: false,
     },
@@ -41,22 +36,13 @@ export const CampusModel = database.define("campuses", {
         allowNull: false,
         defaultValue: Date.now(),
     },
-    business_unit_id: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        references: {
-            model: BusinessUnitModel,
-            key: 'id',
-        },
-    },
     user_id: {
         type: DataTypes.STRING,
         allowNull: true,
         references: {
             model: UserModel,
-            key: 'id',
+            key: "id",
         },
     }
 });
-CampusModel.hasOne(BusinessUnitModel, { foreignKey: 'id', sourceKey: 'business_unit_id' });
-UserModel.hasMany(CampusModel, { foreignKey: 'user_id', sourceKey: 'id' });
+UserModel.hasMany(SalePhaseModel, { foreignKey: 'user_id', sourceKey: 'id' });

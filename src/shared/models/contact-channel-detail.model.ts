@@ -1,23 +1,15 @@
 import { DataTypes } from "sequelize";
 import { database } from "../connections/database/mysql";
-import { BusinessUnitModel } from "./business-unit.model";
+import { ContactChannelModel } from "./contact-channel.model";
 import { UserModel } from "./user.model";
 
-export const SemesterModel = database.define("semesters", {
+export const ContactChannelDetailModel = database.define("contact_channel_details", {
     id: {
         type: DataTypes.STRING,
         allowNull: false,
         primaryKey: true,
     },
     name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    nickname: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    code: {
         type: DataTypes.STRING,
         allowNull: false,
     },
@@ -41,12 +33,12 @@ export const SemesterModel = database.define("semesters", {
         allowNull: false,
         defaultValue: Date.now(),
     },
-    business_unit_id: {
+    contact_channel_id: {
         type: DataTypes.STRING,
         allowNull: false,
         references: {
-            model: BusinessUnitModel,
-            key: 'id',
+            model: ContactChannelModel,
+            key: "id",
         },
     },
     user_id: {
@@ -54,9 +46,9 @@ export const SemesterModel = database.define("semesters", {
         allowNull: true,
         references: {
             model: UserModel,
-            key: 'id',
+            key: "id",
         },
     }
 });
-SemesterModel.hasOne(BusinessUnitModel, { foreignKey: 'id', sourceKey: 'business_unit_id' });
-UserModel.hasMany(SemesterModel, { foreignKey: 'user_id', sourceKey: 'id' });
+ContactChannelDetailModel.hasOne(ContactChannelModel, { foreignKey: "id", sourceKey: "contact_channel_id" });
+UserModel.hasMany(ContactChannelDetailModel, { foreignKey: "user_id", sourceKey: "id" });

@@ -1,19 +1,15 @@
 import { DataTypes } from "sequelize";
 import { database } from "../connections/database/mysql";
-import { BusinessUnitModel } from "./business-unit.model";
+import { TrackingClassificationModel } from "./tracking-classification.model";
 import { UserModel } from "./user.model";
 
-export const CampusModel = database.define("campuses", {
+export const TrackingClassificationActionModel = database.define("tracking_classification_actions", {
     id: {
         type: DataTypes.STRING,
         allowNull: false,
         primaryKey: true,
     },
     name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    nickname: {
         type: DataTypes.STRING,
         allowNull: false,
     },
@@ -41,12 +37,12 @@ export const CampusModel = database.define("campuses", {
         allowNull: false,
         defaultValue: Date.now(),
     },
-    business_unit_id: {
+    tracking_classification_id: {
         type: DataTypes.STRING,
         allowNull: false,
         references: {
-            model: BusinessUnitModel,
-            key: 'id',
+            model: TrackingClassificationModel,
+            key: "id",
         },
     },
     user_id: {
@@ -54,9 +50,9 @@ export const CampusModel = database.define("campuses", {
         allowNull: true,
         references: {
             model: UserModel,
-            key: 'id',
+            key: "id",
         },
-    }
+    },
 });
-CampusModel.hasOne(BusinessUnitModel, { foreignKey: 'id', sourceKey: 'business_unit_id' });
-UserModel.hasMany(CampusModel, { foreignKey: 'user_id', sourceKey: 'id' });
+TrackingClassificationActionModel.hasOne(TrackingClassificationModel, { foreignKey: "id", sourceKey: "tracking_classification_id" });
+UserModel.hasMany(TrackingClassificationActionModel, { foreignKey: "user_id", sourceKey: "id" });

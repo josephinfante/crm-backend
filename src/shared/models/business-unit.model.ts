@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import { database } from "../connections/database/mysql";
 import { UserModel } from "./user.model";
+import { DegreeModel } from "./degree.model";
 
 export const BusinessUnitModel = database.define("business_units", {
     id: {
@@ -17,6 +18,18 @@ export const BusinessUnitModel = database.define("business_units", {
         allowNull: false,
     },
     code: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    current_period: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    default_career: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    next_period: {
         type: DataTypes.STRING,
         allowNull: false,
     },
@@ -40,6 +53,14 @@ export const BusinessUnitModel = database.define("business_units", {
         allowNull: false,
         defaultValue: Date.now(),
     },
+    degree_id: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        references: {
+            model: DegreeModel,
+            key: 'id',
+        },
+    },
     user_id: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -49,4 +70,5 @@ export const BusinessUnitModel = database.define("business_units", {
         },
     },
 });
+BusinessUnitModel.hasOne(DegreeModel, { foreignKey: 'id', sourceKey: 'degree_id' });
 UserModel.hasMany(BusinessUnitModel, { foreignKey: 'user_id', sourceKey: 'id' });

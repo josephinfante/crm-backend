@@ -1,19 +1,16 @@
 import { DataTypes } from "sequelize";
 import { database } from "../connections/database/mysql";
-import { BusinessUnitModel } from "./business-unit.model";
 import { UserModel } from "./user.model";
+import { SalePhaseModel } from "./sale-phase.model";
+import { BusinessUnitModel } from "./business-unit.model";
 
-export const CampusModel = database.define("campuses", {
+export const TrackingClassificationModel = database.define("tracking_classifications", {
     id: {
         type: DataTypes.STRING,
         allowNull: false,
         primaryKey: true,
     },
     name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    nickname: {
         type: DataTypes.STRING,
         allowNull: false,
     },
@@ -46,7 +43,15 @@ export const CampusModel = database.define("campuses", {
         allowNull: false,
         references: {
             model: BusinessUnitModel,
-            key: 'id',
+            key: "id",
+        },
+    },
+    sale_phase_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        references: {
+            model: SalePhaseModel,
+            key: "id",
         },
     },
     user_id: {
@@ -54,9 +59,10 @@ export const CampusModel = database.define("campuses", {
         allowNull: true,
         references: {
             model: UserModel,
-            key: 'id',
+            key: "id",
         },
     }
 });
-CampusModel.hasOne(BusinessUnitModel, { foreignKey: 'id', sourceKey: 'business_unit_id' });
-UserModel.hasMany(CampusModel, { foreignKey: 'user_id', sourceKey: 'id' });
+TrackingClassificationModel.hasOne(BusinessUnitModel, { foreignKey: 'id', sourceKey: 'business_unit_id' });
+TrackingClassificationModel.hasOne(SalePhaseModel, { foreignKey: 'id', sourceKey: 'sale_phase_id' });
+UserModel.hasMany(TrackingClassificationModel, { foreignKey: 'user_id', sourceKey: 'id' });

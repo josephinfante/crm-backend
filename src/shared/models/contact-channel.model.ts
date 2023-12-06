@@ -1,9 +1,8 @@
 import { DataTypes } from "sequelize";
 import { database } from "../connections/database/mysql";
-import { BusinessUnitModel } from "./business-unit.model";
 import { UserModel } from "./user.model";
 
-export const CampusModel = database.define("campuses", {
+export const ContactChannelModel = database.define("contact_channels", {
     id: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -13,12 +12,32 @@ export const CampusModel = database.define("campuses", {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    nickname: {
+    code: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    code: {
-        type: DataTypes.STRING,
+    automatic_assignment: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+    },
+    manual_assignment: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+    },
+    send_email: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+    },
+    send_sms: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+    },
+    send_note: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+    },
+    expire_days: {
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
     hidden: {
@@ -41,22 +60,13 @@ export const CampusModel = database.define("campuses", {
         allowNull: false,
         defaultValue: Date.now(),
     },
-    business_unit_id: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        references: {
-            model: BusinessUnitModel,
-            key: 'id',
-        },
-    },
     user_id: {
         type: DataTypes.STRING,
         allowNull: true,
         references: {
             model: UserModel,
-            key: 'id',
-        },
+            key: "id",
+        }
     }
 });
-CampusModel.hasOne(BusinessUnitModel, { foreignKey: 'id', sourceKey: 'business_unit_id' });
-UserModel.hasMany(CampusModel, { foreignKey: 'user_id', sourceKey: 'id' });
+UserModel.hasMany(ContactChannelModel, { foreignKey: "user_id", sourceKey: "id" });

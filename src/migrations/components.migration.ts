@@ -4,7 +4,7 @@ import { UniqueID } from "../shared/utils";
 
 const components_data = [
     {name: 'user'},
-    {name: 'semester'},
+    {name: 'period'},
     {name: 'school'},
     {name: 'role'},
     {name: 'page'},
@@ -17,13 +17,21 @@ const components_data = [
     {name: 'country'},
     {name: 'contact-language'},
     {name: 'contact-degree'},
-    {name: 'contact-channel'},
     {name: 'contact'},
-    {name: 'component'},
     {name: 'college'},
     {name: 'career'},
     {name: 'campus'},
     {name: 'business-unit'},
+    {name: 'event'},
+    {name: 'district'},
+    {name: 'city'},
+    {name: 'state'},
+    {name: 'sale-phase'},
+    {name: 'tracking-classification-action'},
+    {name: 'tracking-classification'},
+    {name: 'contact-channel-detail'},
+    {name: 'contact-channel'},
+    {name: 'opportunity'},
 ]
 
 async function ComponentsMigration() {

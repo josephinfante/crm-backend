@@ -15,6 +15,9 @@ export class ContactCrudUseCase {
     async delete(access: IAccessPermission, id: string): Promise<string | void> {
         return await this.contactRepository.delete(access, id);
     }
+    async findById(access: IAccessPermission, id: string): Promise<IContactResponse> {
+        return await this.contactRepository.findById(access, id);
+    }
     async findAll(access: IAccessPermission, page: number, value?: string): Promise<{ contacts: {}[], total_contacts: number, total_pages: number, current_page: number}> {
         return await this.contactRepository.findAll(access, page, value);
     }

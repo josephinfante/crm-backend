@@ -5,7 +5,7 @@ import { GetZipCode, ListCondition, UniqueID } from "../../shared/utils";
 import { CollegeError, ContactError, CountryError, DegreeSpecificationError, DistrictError, EthnicityError, NationalityError } from "../../shared/errors";
 import { ContactPresenter, IContactResponse } from "../../interfaces/presenters/contact.presenter";
 import { ICreateContact } from "../../domain/contact/contact.type";
-import { CreateContactLanguage, FindLanguagesByContactId } from "../contact-language/contact-language.dao";
+import { CreateContactLanguage, DeleteLanguagesByContactId, FindLanguagesByContactId } from "../contact-language/contact-language.dao";
 import { IContactLanguageResponse } from "../../interfaces/presenters/contact-language.presenter";
 import { Contact } from "../../domain/contact/contact";
 
@@ -178,6 +178,7 @@ class ContactDao {
             const updated = await contact_exist.save()
                 .then(contact => contact)
                 .catch(_error => { throw new ContactError('Ha ocurrido un error al actualizar el contacto.') });
+            await DeleteLanguagesByContactId(access, id);
             const languages = await FindLanguagesByContactId(id);
             if (contact.college_id) {
                 college = await CollegeModel.findByPk(contact.college_id)
@@ -246,6 +247,66 @@ class ContactDao {
         } catch (error) {
             if (error instanceof Error && error.message) throw new ContactError(error.message);
             else throw new Error("Ha ocurrido un error al eliminar el contacto.");
+        }
+    }
+    async findById(access: IAccessPermission, id: string): Promise<IContactResponse> {
+        try {
+            let college;
+            let degree_specification;
+            let ethnicity;
+            let nationality;
+            let country;
+            let district;
+            const contact_exist = access.super_admin === true ? 
+                await ContactModel.findByPk(id)
+                    .then(contact => contact)
+                    .catch(_error => { throw new ContactError('Ha ocurrido un error al revisar el contacto.') }) :
+                await ContactModel.findOne({ where: { id: id, user_id: access.user_id } })
+                    .then(contact => contact)
+                    .catch(_error => { throw new ContactError('Ha ocurrido un error al revisar el contacto.') });
+            if (!contact_exist) throw new ContactError(`El contacto con ID ${id} no existe.`);
+
+            const languages = await FindLanguagesByContactId(id);
+            if (contact_exist.dataValues.college_id) {
+                college = await CollegeModel.findByPk(contact_exist.dataValues.college_id)
+                    .then(college => college)
+                    .catch(_error => {throw new CollegeError("Ha ocurrido un error al revisar la institución educativa.")});
+                if (!college) throw new CollegeError("La institución educativa no existe.");
+            }
+            if (contact_exist.dataValues.degree_specification_id) {
+                degree_specification = await DegreeSpecificationModel.findByPk(contact_exist.dataValues.degree_specification_id)
+                    .then(degree_specification => degree_specification)
+                    .catch(_error => {throw new DegreeSpecificationError("Ha ocurrido un error al revisar la especificación del grado académico.")});
+                if (!degree_specification) throw new DegreeSpecificationError("La especialidad no existe.");
+            }
+            if (contact_exist.dataValues.ethnicity_id) {
+                ethnicity = await EthnicityModel.findByPk(contact_exist.dataValues.ethnicity_id)
+                    .then(ethnicity => ethnicity)
+                    .catch((_error) => { throw new EthnicityError("Ha ocurrido un error al revisar la etnia.") });
+                if (!ethnicity) throw new EthnicityError("La etnia no existe.");
+            }
+            if (contact_exist.dataValues.nationality_id) {
+                nationality = await NationalityModel.findByPk(contact_exist.dataValues.nationality_id)
+                    .then(nationality => nationality)
+                    .catch((_error) => { throw new NationalityError("Ha ocurrido un error al revisar la nacionalidad.") });
+                if(!nationality) throw new NationalityError("La nacionalidad no existe.");
+            }
+            if (contact_exist.dataValues.country_id) {
+                country = await CountryModel.findByPk(contact_exist.dataValues.country_id)
+                    .then(country => country)
+                    .catch((_error) => { throw new CountryError("Ha ocurrido un error al revisar el país.") });
+                if (!country) throw new CountryError("El país no existe.");
+            }
+            if (contact_exist.dataValues.district_id) {
+                district = await DistrictModel.findByPk(contact_exist.dataValues.district_id)
+                    .then(district => district)
+                    .catch((_error) => { throw new DistrictError("Ha ocurrido un error al revisar el distrito.") });
+                if (!district) throw new DistrictError("El distrito no existe.");
+            }
+            return ContactPresenter(contact_exist.dataValues, access, languages, college?.dataValues, degree_specification?.dataValues, ethnicity?.dataValues, nationality?.dataValues, country?.dataValues, district?.dataValues);
+        } catch (error) {
+            if (error instanceof Error && error.message) throw new ContactError(error.message);
+            else throw new Error('Ha ocurrido un error al obtener el contacto.');
         }
     }
     async findAll(access: IAccessPermission, page: number, value?: string): Promise<{ contacts: {}[], total_contacts: number, total_pages: number, current_page: number}> {

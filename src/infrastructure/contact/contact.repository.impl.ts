@@ -14,6 +14,9 @@ export class ContactRepositoryImpl implements ContactRepository {
     delete(access: IAccessPermission, id: string): Promise<string | void> {
         return contactDao.delete(access, id);
     }
+    findById(access: IAccessPermission, id: string): Promise<IContactResponse> {
+        return contactDao.findById(access, id);
+    }
     findAll(access: IAccessPermission, page: number, value?: string | undefined): Promise<{ contacts: {}[]; total_contacts: number; total_pages: number; current_page: number; }> {
         return contactDao.findAll(access, page, value);
     }

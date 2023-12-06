@@ -17,15 +17,15 @@ export interface ICareerResponse {
     updatedAt: number;
 }
 
-export function CareerPresenter(career: ICareer, access: IAccessPermission, school?: ISchool): ICareerResponse {
+export function CareerPresenter(career: ICareer, access: IAccessPermission, school: ISchool): ICareerResponse {
     return {
         id: career.id,
         name: career.name,
         nickname: career.nickname,
         code: career.code,
         school: {
-            id: school?.id || "",
-            name: school?.name || "",
+            id: school.id,
+            name: school.name,
         },
         hidden: career.hidden,
         ...((access?.super_admin || access?.permission.read_deleted) && { deleted: career.deleted }),

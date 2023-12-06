@@ -63,9 +63,9 @@ test.runIf(idDevelopment)("POST /api/v1/period", async function() {
     });
 });
 
-test.runIf(idDevelopment)("GET /api/v1/period", async function() {
+test.runIf(idDevelopment)("GET /api/v1/periods/business_unit_id", async function() {
     const response = await request.agent(app)
-        .get(`/api/v1/period/${period.business_unit_id}`)
+        .get(`/api/v1/periods/${period.business_unit_id}`)
         .set('x-user-token', user_token)
         .then(response => response.body);
     expect(response).toStrictEqual(expect.any(Array));

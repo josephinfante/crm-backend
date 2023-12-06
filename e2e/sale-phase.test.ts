@@ -9,13 +9,11 @@ const login = {
     email: 'edmundoach@gmail.com',
     password: 'mypassword',
 }
-const career = {
-    name: `CAREER-NAME${Math.random().toString().slice(2, 10)}`,
-    nickname: `CAREER-NICKNAME${Math.random().toString().slice(2, 10)}`,
-    code: `CAREER-CODE${Math.random().toString().slice(2, 10)}`,
-    school_id: '6566d1a1-f468-c3dd-72c9fa48',
+const sale_phase = {
+    name: `SALEPHASE-NAME${Math.random().toString().slice(2, 10)}`,
+    code: `SALEPHASE-CODE${Math.random().toString().slice(2, 10)}`,
 }
-let career_id: string = '';
+let sale_phase_id: string = '';
 let user_token: string = '';
 
 test.runIf(idDevelopment)("POST /api/v1/login", async function() {
@@ -40,22 +38,17 @@ test.runIf(idDevelopment)("POST /api/v1/login", async function() {
     });
 });
 
-test.runIf(idDevelopment)("POST /api/v1/career", async function() {
+test.runIf(idDevelopment)("POST /api/v1/sale-phase", async function() {
     const response = await request.agent(app)
-        .post('/api/v1/career')
+        .post('/api/v1/sale-phase')
         .set('x-user-token', user_token)
-        .send(career)
+        .send(sale_phase)
         .then(response => response.body);
-    career_id = response.id;
+    sale_phase_id = response.id;
     expect(response).toStrictEqual({
         id: expect.any(String),
-        name: career.name,
-        nickname: career.nickname,
-        code: career.code,
-        school: {
-            id: expect.any(String),
-            name: expect.any(String),
-        },
+        name: sale_phase.name,
+        code: sale_phase.code,
         hidden: expect.any(Boolean),
         deleted: expect.any(Boolean),
         updatedAt: expect.any(Number),
@@ -63,29 +56,24 @@ test.runIf(idDevelopment)("POST /api/v1/career", async function() {
     });
 });
 
-test.runIf(idDevelopment)("GET /api/v1/career", async function() {
+test.runIf(idDevelopment)("GET /api/v1/sale-phases", async function() {
     const response = await request.agent(app)
-        .get(`/api/v1/career/${career.school_id}`)
+        .get('/api/v1/sale-phases')
         .set('x-user-token', user_token)
         .then(response => response.body);
     expect(response).toStrictEqual(expect.any(Array));
 });
 
-test.runIf(idDevelopment)("PUT /api/v1/career/:id", async function() {
+test.runIf(idDevelopment)("PUT /api/v1/sale-phase/:id", async function() {
     const response = await request.agent(app)
-        .put(`/api/v1/career/${career_id}`)
+        .put(`/api/v1/sale-phase/${sale_phase_id}`)
         .set('x-user-token', user_token)
-        .send(career)
+        .send(sale_phase)
         .then(response => response.body);
     expect(response).toStrictEqual({
-        id: career_id,
-        name: career.name,
-        nickname: career.nickname,
-        code: career.code,
-        school: {
-            id: expect.any(String),
-            name: expect.any(String),
-        },
+        id: expect.any(String),
+        name: expect.any(String),
+        code: expect.any(String),
         hidden: expect.any(Boolean),
         deleted: expect.any(Boolean),
         updatedAt: expect.any(Number),
@@ -93,9 +81,9 @@ test.runIf(idDevelopment)("PUT /api/v1/career/:id", async function() {
     });
 });
 
-test.runIf(idDevelopment)("DELETE /api/v1/career/:id", async function() {
+test.runIf(idDevelopment)("DELETE /api/v1/sale-phase/:id", async function() {
     await request.agent(app)
-        .delete(`/api/v1/career/${career_id}`)
+        .delete(`/api/v1/sale-phase/${sale_phase_id}`)
         .set('x-user-token', user_token)
         .expect(204);
 });

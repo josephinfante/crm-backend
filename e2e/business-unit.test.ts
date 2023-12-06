@@ -13,6 +13,10 @@ const business_unit = {
     name: `BUSINESSUNIT-NAME${Math.random().toString().slice(2, 10)}`,
     nickname: `BUSINESSUNIT-NICKNAME${Math.random().toString().slice(2, 10)}`,
     code: `BUSINESSUNIT-CODE${Math.random().toString().slice(2, 10)}`,
+    degree_id: '6565635a-5561-f9ae-dcd8d9f0',
+    current_period: '1',
+    default_career: '1',
+    next_period: '2',
 }
 let business_unit_id: string = '';
 let user_token: string = '';
@@ -51,6 +55,13 @@ test.runIf(idDevelopment)("POST /api/v1/business-unit", async function() {
         name: business_unit.name,
         nickname: business_unit.nickname,
         code: business_unit.code,
+        degree: {
+            id: expect.any(String),
+            name: expect.any(String),
+        },
+        current_period: expect.any(String),
+        default_career: expect.any(String),
+        next_period: expect.any(String),
         hidden: false,
         deleted: false,
         updatedAt: expect.any(Number),
@@ -101,6 +112,13 @@ test.runIf(idDevelopment)("PUT /api/v1/business-unit/:id", async function() {
         name: business_unit.name,
         nickname: business_unit.nickname,
         code: business_unit.code,
+        degree: {
+            id: expect.any(String),
+            name: expect.any(String),
+        },
+        current_period: expect.any(String),
+        default_career: expect.any(String),
+        next_period: expect.any(String),
         hidden: false,
         deleted: false,
         updatedAt: expect.any(Number),

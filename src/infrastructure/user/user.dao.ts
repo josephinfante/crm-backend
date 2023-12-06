@@ -9,6 +9,8 @@ import { JWT_SECRET } from "../../../globals";
 import { SignJWT } from "jose";
 import { IUserResponse, UserPresenter } from "../../interfaces/presenters/user.presenter";
 import { IRole } from "../../domain/role/role.type";
+import { GetPermissionsByRoleId } from "../permission/permission.dao";
+import { FindAllPagesWithRoleId } from "../menu/menu.dao";
 
 class UserDao {
     async create(access: IAccessPermission, user: User): Promise<IUserResponse> {
@@ -217,6 +219,9 @@ class UserDao {
 
             if (!password_match) throw new UserError('La contraseña es incorrecta.');
 
+            const permissions = await GetPermissionsByRoleId(user.dataValues.role_id);
+            const pages = await FindAllPagesWithRoleId(user.dataValues.role_id);
+
             const roleName = user.dataValues.role?.name;
             const secretKey: Uint8Array = new TextEncoder().encode(JWT_SECRET);
             const signContent = { id: user.dataValues.id, role: roleName ?? '' };
@@ -238,8 +243,29 @@ class UserDao {
                 document_type: user.dataValues.document_type,
                 phone_number: user.dataValues.phone_number,
                 token: token,
-                pages: [],
-                permissions: [],
+                pages: pages.map(page => {
+                    return {
+                        id: page.id,
+                        name: page.name,
+                        external_url: page.external_url,
+                    };
+                }),
+                permissions: permissions.map(permission => {
+                    return {
+                        component: {
+                            id: permission.id,
+                            name: permission.name,
+                        },
+                        permissions: {
+                            create: permission.permissions.create,
+                            read: permission.permissions.read,
+                            update: permission.permissions.update,
+                            delete: permission.permissions.delete,
+                            read_all: permission.permissions.read_all,
+                            read_deleted: permission.permissions.read_deleted,
+                        },
+                    };
+                }),
                 createdAt: user.dataValues.createdAt,
                 updatedAt: user.dataValues.updatedAt,
             };

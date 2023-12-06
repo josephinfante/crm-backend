@@ -6,8 +6,8 @@ import { RoleModel } from "../../shared/models";
 import { PageModel } from "../../shared/models/page.model";
 import { ListCondition, UniqueID } from "../../shared/utils";
 import { FindComponentById } from "../component/component.dao";
-import { CreateMenu, FindPageWithMenu, UpdateMenu } from "../menu/menu.dao";
-import { CreatePermission, FindComponentWithPermission, UpdatePermission } from "../permission/permission.dao";
+import { CreateMenu, DeleteMenu, FindPageWithMenu, UpdateMenu } from "../menu/menu.dao";
+import { CreatePermission, DeletePermission, FindComponentWithPermission, UpdatePermission } from "../permission/permission.dao";
 
 class RoleDao {
     constructor() {
@@ -104,6 +104,9 @@ class RoleDao {
                 Rupdated = role_exists.dataValues;
             }
 
+            role.pages ? await DeleteMenu(access, Rupdated.id) : null;
+            role.components ? await DeletePermission(access, Rupdated.id) : null;
+
             for (const page of role.pages) {
                 const page_exists = access.super_admin === true ? await PageModel.findOne({ where: { id: page.id } })
                     .then(page => page)
@@ -113,7 +116,6 @@ class RoleDao {
                     .catch(_error => { throw new PageError('Ha ocurrido un error al revisar la página.') });
 
                 if (!page_exists) throw new PageError(`La página con ID ${page.id} no existe.`);
-                // Deletes and create a new menu
                 await UpdateMenu(access, Rupdated.id, page_exists.dataValues.id);
 
                 RPages.push({
@@ -127,7 +129,6 @@ class RoleDao {
 
             for (const component of role.components) {
                 const component_exist = await FindComponentById(component.id);
-                // Deletes and create a new permission
                 await UpdatePermission(access, Rupdated.id, component_exist.id, component.permissions);
             
                 RComponents.push({
@@ -148,7 +149,7 @@ class RoleDao {
             return RolePresenter(Rupdated, RPages, RComponents, access);
         } catch (error) {
             if (error instanceof Error && error.message) throw new RoleError(error.message);
-            else throw new Error('Ha ocurrido un error al tratar de actualizar el rol.');
+            else throw new Error('Ha ocurrido un error al actualizar el rol.');
         }
     }
     async delete(access: IAccessPermission, id: string): Promise<void> {

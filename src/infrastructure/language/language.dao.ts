@@ -138,8 +138,8 @@ class LanguageDao {
                 where: {
                     ...whereCondition,
                     ...nameOrCodeCondition,
+                    ...ListCondition(access),
                 },
-                ...ListCondition(access),
             });
 
             return languages.map(language => LanguagePresenter(language.dataValues, access));

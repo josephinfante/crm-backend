@@ -42,6 +42,7 @@ async function verifyAccess(component_name: string, permissionType: PermissionTy
             return;
         }
 
+        res.locals.role_id = user.role_id;
         res.locals.access = {
             user_id: payload.id,
             super_admin: user.super_admin,

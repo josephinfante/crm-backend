@@ -17,4 +17,7 @@ export class SchoolCrudUseCase {
     async findByBusinessUnitId(access: IAccessPermission, business_unit_id: string): Promise<ISchoolResponse[]> {
         return await this.schoolRepository.findByBusinessUnitId(access, business_unit_id);
     }
+    async findAll(access: IAccessPermission): Promise<ISchoolResponse[]> {
+        return await this.schoolRepository.findAll(access);
+    }
 }

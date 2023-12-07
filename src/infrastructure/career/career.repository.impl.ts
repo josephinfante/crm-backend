@@ -17,4 +17,7 @@ export class CareerRepositoryImpl implements CareerRepository {
     findBySchoolId(access: IAccessPermission, school_id: string): Promise<ICareerResponse[]> {
         return careerDao.findBySchoolId(access, school_id);
     }
+    findAll(access: IAccessPermission): Promise<ICareerResponse[]> {
+        return careerDao.findAll(access);
+    }
 }

@@ -12,5 +12,6 @@ const contactController = new ContactController(contactCrudUseCase);
 contactRouter.post("/v1/contact", Access.canCreate('contact'), contactController.create.bind(contactController));
 contactRouter.put("/v1/contact/:id", Access.canUpdate('contact'), contactController.update.bind(contactController));
 contactRouter.delete("/v1/contact/:id", Access.canDelete('contact'), contactController.delete.bind(contactController));
+contactRouter.get("/v1/contact/:id", Access.canRead('contact'), contactController.findById.bind(contactController));
 contactRouter.get("/v1/contacts", Access.canRead('contact'), contactController.findAll.bind(contactController));
 export default contactRouter;

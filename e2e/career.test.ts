@@ -52,6 +52,10 @@ test.runIf(idDevelopment)("POST /api/v1/career", async function() {
         name: career.name,
         nickname: career.nickname,
         code: career.code,
+        school: {
+            id: expect.any(String),
+            name: expect.any(String),
+        },
         hidden: expect.any(Boolean),
         deleted: expect.any(Boolean),
         updatedAt: expect.any(Number),
@@ -78,6 +82,10 @@ test.runIf(idDevelopment)("PUT /api/v1/career/:id", async function() {
         name: career.name,
         nickname: career.nickname,
         code: career.code,
+        school: {
+            id: expect.any(String),
+            name: expect.any(String),
+        },
         hidden: expect.any(Boolean),
         deleted: expect.any(Boolean),
         updatedAt: expect.any(Number),

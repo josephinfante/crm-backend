@@ -7,5 +7,6 @@ export interface ContactRepository {
     create(access: IAccessPermission, contact: ICreateContact): Promise<IContactResponse>;
     update(access: IAccessPermission, id: string, contact: Contact): Promise<IContactResponse>;
     delete(access: IAccessPermission, id: string): Promise<string | void>;
+    findById(access: IAccessPermission, id: string): Promise<IContactResponse>;
     findAll(access: IAccessPermission, page: number, value?: string): Promise<{ contacts: {}[], total_contacts: number, total_pages: number, current_page: number}>;
 }

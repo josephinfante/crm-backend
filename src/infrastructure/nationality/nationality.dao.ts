@@ -137,8 +137,8 @@ class NationalityDao {
                 where: {
                     ...whereCondition,
                     ...nameOrCodeCondition,
+                    ...ListCondition(access),
                 },
-                ...ListCondition(access),
             });
 
             return nationalities.map(nationality => NationalityPresenter(nationality.dataValues, access));

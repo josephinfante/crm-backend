@@ -52,6 +52,10 @@ test.runIf(idDevelopment)("POST /api/v1/campus", async function() {
         name: campus.name,
         nickname: campus.nickname,
         code: campus.code,
+        business_unit: {
+            id: expect.any(String),
+            name: expect.any(String),
+        },
         hidden: expect.any(Boolean),
         deleted: expect.any(Boolean),
         updatedAt: expect.any(Number),
@@ -59,9 +63,9 @@ test.runIf(idDevelopment)("POST /api/v1/campus", async function() {
     });
 });
 
-test.runIf(idDevelopment)("GET /api/v1/campus", async function() {
+test.runIf(idDevelopment)("GET /api/v1/campuses/:business_unit_id", async function() {
     const response = await request.agent(app)
-        .get(`/api/v1/campus/${campus.business_unit_id}`)
+        .get(`/api/v1/campuses/${campus.business_unit_id}`)
         .set('x-user-token', user_token)
         .then(response => response.body);
     expect(response).toStrictEqual(expect.any(Array));
@@ -78,6 +82,10 @@ test.runIf(idDevelopment)("PUT /api/v1/campus/:id", async function() {
         name: campus.name,
         nickname: campus.nickname,
         code: campus.code,
+        business_unit: {
+            id: expect.any(String),
+            name: expect.any(String),
+        },
         hidden: expect.any(Boolean),
         deleted: expect.any(Boolean),
         updatedAt: expect.any(Number),

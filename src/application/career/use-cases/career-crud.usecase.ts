@@ -17,4 +17,7 @@ export class CareerCrudUseCase {
     async findBySchoolId(access: IAccessPermission, school_id: string): Promise<ICareerResponse[]> {
         return await this.careerRepository.findBySchoolId(access, school_id);
     }
+    async findAll(access: IAccessPermission): Promise<ICareerResponse[]> {
+        return await this.careerRepository.findAll(access);
+    }
 }

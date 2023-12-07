@@ -43,4 +43,13 @@ export class SchoolController {
             else res.status(500).json({error: 'Ha ocurrido un error al obtener las escuelas profesionales.'});
         }
     }
+    async findAll(_req: Request, res: Response) {
+        try {
+            const schools = await this.school.findAll(res.locals.access);
+            res.status(200).json(schools);
+        } catch (error) {
+            if (error instanceof SchoolError) res.status(400).json({error: error.message});
+            else res.status(500).json({error: 'Ha ocurrido un error al obtener las escuelas profesionales.'});
+        }
+    }
 }

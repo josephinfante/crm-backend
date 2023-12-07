@@ -8,9 +8,6 @@ export class Role {
     pages: {
         id: string;
         name: string;
-        menu: {
-            id?: string;
-        };
     }[];
     components: {
         id: string;
@@ -26,7 +23,7 @@ export class Role {
     }[];
     createdAt: number;
     updatedAt: number;
-    user_id: string;
+    user_id: string | null;
     constructor(role: IRole) {
         this.id = role.id;
         this.name = role.name;

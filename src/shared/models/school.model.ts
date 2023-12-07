@@ -58,5 +58,5 @@ export const SchoolModel = database.define("schools", {
         },
     }
 });
-BusinessUnitModel.hasMany(SchoolModel, { foreignKey: 'business_unit_id', sourceKey: 'id' });
+SchoolModel.hasOne(BusinessUnitModel, { foreignKey: 'id', sourceKey: 'business_unit_id' });
 UserModel.hasMany(SchoolModel, { foreignKey: 'user_id', sourceKey: 'id' });

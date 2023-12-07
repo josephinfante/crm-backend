@@ -26,7 +26,6 @@ class PageDao {
                             {
                                 [Op.or]: [
                                     { name: page.name },
-                                    { external_url: page.external_url }
                                 ]
                             },
                             { user_id: access.user_id }
@@ -62,7 +61,6 @@ class PageDao {
                             {
                                 [Op.or]: [
                                     { name: page.name },
-                                    { external_url: page.external_url }
                                 ]
                             },
                             ...(access.super_admin === false ? [{ user_id: access.user_id }] : []),

@@ -22,15 +22,10 @@ class DegreeDao {
 
             const [_degree, created] = await DegreeModel.findOrCreate({
                     where: {
-                        [Op.and]: [
-                            {
-                                [Op.or]: [
-                                    { name: degree.name },
-                                    { code: degree.code },
-                                ]
-                            },
-                            { user_id: access.user_id }
-                        ],
+                        [Op.or]: [
+                            { name: degree.name },
+                            { code: degree.code },
+                        ]
                     },
                     defaults: new_degree,
                 })
@@ -173,8 +168,8 @@ class DegreeDao {
                 where: {
                     ...whereCondition,
                     ...nameOrCodeCondition,
+                    ...ListCondition(access),
                 },
-                ...ListCondition(access),
             });
 
             return degrees.map(degree => DegreePresenter(degree.dataValues, access));

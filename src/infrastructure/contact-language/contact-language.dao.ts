@@ -83,6 +83,19 @@ export async function UpdateContactLanguage(access: IAccessPermission, contact_l
     }
 }
 
+export async function DeleteLanguagesByContactId(access: IAccessPermission, contact_id: string) {
+    try {
+        access.super_admin === true ? 
+            await ContactLanguageModel.destroy({ where: { contact_id: contact_id } })
+                .catch((_error) => { throw new ContactLanguageError("Ha ocurrido un error al tratar eliminar los idiomas del contacto.") }) :
+            await ContactLanguageModel.destroy({ where: { contact_id: contact_id, user_id: access.user_id } })
+                .catch((_error) => { throw new ContactLanguageError("Ha ocurrido un error al tratar eliminar los idiomas del contacto.") });
+    } catch (error) {
+        if (error instanceof Error && error.message) throw new ContactLanguageError(error.message);
+        else throw new Error("Ha ocurrido un error al eliminar los idiomas del contacto.");
+    }
+}
+
 export async function FindLanguagesByContactId(contact_id: string) {
     try {
         const contact_languages = await ContactLanguageModel.findAll({ 

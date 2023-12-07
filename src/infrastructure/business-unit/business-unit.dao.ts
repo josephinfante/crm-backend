@@ -4,7 +4,7 @@ import { BusinessUnit } from "../../domain/business-unit/business-unit";
 import { BusinessUnitPresenter, IBusinessUnitResponse } from "../../interfaces/presenters/business-unit.presenter";
 import { UniqueID, ListCondition } from "../../shared/utils";
 import { BusinessUnitError } from "../../shared/errors";
-import { BusinessUnitModel } from "../../shared/models";
+import { BusinessUnitModel, DegreeModel } from "../../shared/models";
 
 class BusinessUnitDao {
     async create(access: IAccessPermission, business_unit: BusinessUnit): Promise<IBusinessUnitResponse> {
@@ -14,10 +14,14 @@ class BusinessUnitDao {
                 name: business_unit.name,
                 nickname: business_unit.nickname,
                 code: business_unit.code,
+                current_period: business_unit.current_period,
+                default_career: business_unit.default_career,
+                next_period: business_unit.next_period,
                 hidden: false,
                 deleted: false,
                 createdAt: Date.now(),
                 updatedAt: Date.now(),
+                degree_id: business_unit.degree_id,
                 user_id: access.user_id,
             }
             const [_business_unit, created] = await BusinessUnitModel.findOrCreate({
@@ -78,8 +82,12 @@ class BusinessUnitDao {
                 name: business_unit.name ?? business_unit_exist.dataValues.name,
                 nickname: business_unit.nickname ?? business_unit_exist.dataValues.nickname,
                 code: business_unit.code ?? business_unit_exist.dataValues.code,
+                current_period: business_unit.current_period ?? business_unit_exist.dataValues.current_period,
+                default_career: business_unit.default_career ?? business_unit_exist.dataValues.default_career,
+                next_period: business_unit.next_period ?? business_unit_exist.dataValues.next_period,
                 hidden: business_unit.hidden ?? business_unit_exist.dataValues.hidden,
                 updatedAt: Date.now(),
+                degree_id: business_unit.degree_id ?? business_unit_exist.dataValues.degree_id,
             });
 
             const updated = await business_unit_exist.save()
@@ -141,11 +149,12 @@ class BusinessUnitDao {
                 where: {
                     ...whereCondition,
                     ...nameOrCodeCondition,
+                    ...ListCondition(access),
                 },
-                ...ListCondition(access),
+                include: [{ model: DegreeModel }]
             });
 
-            return business_units.map(business_unit => BusinessUnitPresenter(business_unit.dataValues, access));
+            return business_units.map(business_unit => BusinessUnitPresenter(business_unit.dataValues, access, business_unit.dataValues.degree?.dataValues));
         } catch (error) {
             if (error instanceof Error && error.message) throw new BusinessUnitError(error.message);
             else throw new Error("Ha ocurrido un error al obtener las unidades de negocio.");

@@ -2,6 +2,10 @@ export interface ICreateBusinessUnit {
     name: string;
     nickname: string;
     code: string;
+    current_period: string;
+    default_career: string;
+    next_period: string;
+    degree_id: string | null;
 }
 
 export interface IUpdateBusinessUnit extends ICreateBusinessUnit {

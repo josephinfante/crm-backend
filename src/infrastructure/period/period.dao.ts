@@ -4,11 +4,23 @@ import { ListCondition, UniqueID } from "../../shared/utils";
 import { IPeriodResponse, PeriodPresenter } from "../../interfaces/presenters/period.presenter";
 import { Period } from "../../domain/period/period";
 import { BusinessUnitModel, PeriodModel } from "../../shared/models";
-import { PeriodError } from "../../shared/errors";
+import { BusinessUnitError, PeriodError } from "../../shared/errors";
 
 class PeriodDao {
     async create(access: IAccessPermission, period: Period): Promise<IPeriodResponse> {
         try {
+            const business_unit_exist = access.super_admin === true ?
+                await BusinessUnitModel.findByPk(period.business_unit_id)
+                    .then(business_unit => business_unit)
+                    .catch((_error) => { throw new BusinessUnitError("Ha ocurrido un error al revisar la unidad de negocio.") }) :
+                await BusinessUnitModel.findOne({ 
+                        where: { id: period.business_unit_id, user_id: access.user_id }
+                    })
+                    .then(business_unit => business_unit)
+                    .catch((_error) => { throw new BusinessUnitError("Ha ocurrido un error al revisar la unidad de negocio.") });
+
+            if (!business_unit_exist) throw new BusinessUnitError("La unidad de negocio no existe.");
+
             const new_period = {
                 id: UniqueID.generate(),
                 name: period.name,
@@ -36,7 +48,7 @@ class PeriodDao {
 
             if (!created) throw new PeriodError("El período académico ya existe.");
 
-            return PeriodPresenter(new_period, access);
+            return PeriodPresenter(new_period, access, business_unit_exist.dataValues);
         } catch (error) {
             if (error instanceof Error && error.message) throw new PeriodError(error.message);
             else throw new Error("Ha ocurrido un error al crear el período académico.");
@@ -44,11 +56,18 @@ class PeriodDao {
     }
     async update(access: IAccessPermission, id: string, period: Period): Promise<IPeriodResponse> {
         try {
+            let business_unit;
             const period_exist = access.super_admin === true ?
-                await PeriodModel.findOne({ where: { id: id } })
+                await PeriodModel.findOne({ 
+                        where: { id: id },
+                        include: [{ model: BusinessUnitModel }]
+                    })
                     .then(period => period)
                     .catch((_error) => { throw new PeriodError("Ha ocurrido un error al revisar el período académico.") }) :
-                await PeriodModel.findOne({ where: { id: id, user_id: access.user_id } })
+                await PeriodModel.findOne({ 
+                        where: { id: id, user_id: access.user_id },
+                        include: [{ model: BusinessUnitModel }]
+                    })
                     .then(period => period)
                     .catch((_error) => { throw new PeriodError("Ha ocurrido un error al revisar el período académico.") });
 
@@ -76,12 +95,23 @@ class PeriodDao {
 
             if (period_coincidence.length > 0) throw new PeriodError("Ya existe una sede con los datos proporcionados.");
 
+            business_unit = period.business_unit_id !== period_exist.dataValues.business_unit_id ?
+                await BusinessUnitModel.findOne({
+                        where: [
+                            { id: period.business_unit_id },
+                            ...(access.super_admin === false ? [{ user_id: access.user_id }] : []),
+                        ]
+                    })
+                    .then(business_unit => business_unit)
+                    .catch((_error) => { throw new BusinessUnitError("Ha ocurrido un error al revisar la unidad de negocio.") }) :
+                period_exist.dataValues.business_unit;
+
             period_exist.set({
                 name: period.name ?? period_exist.dataValues.name,
                 nickname: period.nickname ?? period_exist.dataValues.nickname,
                 code: period.code ?? period_exist.dataValues.code,
                 hidden: period.hidden ?? period_exist.dataValues.hidden,
-                business_unit_id: period.business_unit_id !== period_exist.dataValues.business_unit_id ? period.business_unit_id : period_exist.dataValues.business_unit_id,
+                business_unit_id: business_unit.dataValues.id,
                 updatedAt: Date.now(),
             });
 
@@ -89,7 +119,7 @@ class PeriodDao {
                 .then(period => period)
                 .catch((_error) => { throw new PeriodError("Ha ocurrido un error al tratar de actualizar el período académico.") });
 
-            return PeriodPresenter(updated.dataValues, access);
+            return PeriodPresenter(updated.dataValues, access, business_unit.dataValues);
         } catch (error) {
             if (error instanceof Error && error.message) throw new PeriodError(error.message);
             else throw new Error("Ha ocurrido un error al actualizar el período académico.");
@@ -121,19 +151,23 @@ class PeriodDao {
     async findByBusinessUnitId(access: IAccessPermission, business_unit_id: string): Promise<IPeriodResponse[]> {
         try {
             const periods = access.super_admin === true ? 
-                await PeriodModel.findAll({ where: { business_unit_id: business_unit_id } })
+                await PeriodModel.findAll({ 
+                        where: { business_unit_id: business_unit_id },
+                        include: [{ model: BusinessUnitModel }]
+                    })
                     .then(periods => periods)
                     .catch((_error) => { throw new PeriodError("Ha ocurrido un error al obtener los períodos académicos.") }) :
                 await PeriodModel.findAll({ 
                         where: [
                             { business_unit_id: business_unit_id, user_id: access.user_id },
                             ListCondition(access)
-                        ]
+                        ],
+                        include: [{ model: BusinessUnitModel }]
                     })
                     .then(periods => periods)
                     .catch((_error) => { throw new PeriodError("Ha ocurrido un error al obtener los períodos académicos.") });
 
-            return periods.map(period => PeriodPresenter(period.dataValues, access));
+            return periods.map(period => PeriodPresenter(period.dataValues, access, period.dataValues.business_unit.dataValues));
         } catch (error) {
             if (error instanceof Error && error.message) throw new PeriodError(error.message);
             else throw new Error("Ha ocurrido un error al obtener los períodos académicos.");
@@ -157,7 +191,7 @@ class PeriodDao {
                     .then(periods => periods)
                     .catch((_error) => { throw new PeriodError("Ha ocurrido un error al obtener los períodos académicos.") });
 
-            return periods.map(period => PeriodPresenter(period.dataValues, access, period.dataValues.business_unit));
+            return periods.map(period => PeriodPresenter(period.dataValues, access, period.dataValues.business_unit.dataValues));
         } catch (error) {
             if (error instanceof Error && error.message) throw new PeriodError(error.message);
             else throw new Error("Ha ocurrido un error al obtener los períodos académicos.");

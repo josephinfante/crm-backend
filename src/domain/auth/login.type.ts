@@ -8,10 +8,9 @@ export interface ILogin {
     phone_number: string;
     token: string;
     pages: {
+        id: string;
         name: string;
-        nickname: string;
-        internal_url: string;
-        external_url: string;
+        external_url?: string;
     }[];
     permissions: {
         component: {

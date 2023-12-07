@@ -16,7 +16,8 @@
     "migrate:nationalities": "ts-node src/migrations/nationalities.migration.ts",
     "migrate:languages": "ts-node src/migrations/languages.migration.ts",
     "migrate:components": "ts-node src/migrations/components.migration.ts",
-    "migrate:pages": "ts-node src/migrations/pages.migration.ts"
+    "migrate:pages": "ts-node src/migrations/pages.migration.ts",
+    "migrate:super-admin": "ts-node src/migrations/super-admin.migration.ts"
   },
   "keywords": [],
   "author": "",

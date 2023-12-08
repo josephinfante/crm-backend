@@ -11,6 +11,10 @@ type PermissionType = 'create' | 'read' | 'update' | 'delete';
 async function verifyAccess(component_name: string, permissionType: PermissionType, req: Request, res: Response, next: NextFunction) {
     try {
         const token = req.headers['x-user-token'] as string;
+        if (!token) {
+            res.status(401).json({ error: 'Access denied. No token provided.' });
+            return;
+        }
         const options: JWTVerifyOptions = {
             algorithms: ['HS256'],
         };
@@ -45,6 +49,7 @@ async function verifyAccess(component_name: string, permissionType: PermissionTy
         res.locals.role_id = user.role_id;
         res.locals.access = {
             user_id: payload.id,
+            user_name: `${user.first_name} ${user.last_name}`,
             super_admin: user.super_admin,
             role_name: payload.role??'',
             permission: {

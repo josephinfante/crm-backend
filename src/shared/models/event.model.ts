@@ -98,6 +98,16 @@ export const EventModel = database.define("event", {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    hidden: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+    },
+    deleted: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+    },
     createdAt: {
         type: DataTypes.BIGINT,
         allowNull: false,
@@ -134,4 +144,5 @@ export const EventModel = database.define("event", {
     },
 });
 EventModel.hasOne(CollegeModel, { foreignKey: "id", sourceKey: "college_id" });
+EventModel.hasOne(CampusModel, { foreignKey: "id", sourceKey: "campus_id" });
 UserModel.hasMany(EventModel, { foreignKey: "user_id", sourceKey: "id" });

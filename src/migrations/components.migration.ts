@@ -22,6 +22,7 @@ const components_data = [
     {name: 'career'},
     {name: 'campus'},
     {name: 'business-unit'},
+    {name: 'event-control'},
     {name: 'event'},
     {name: 'district'},
     {name: 'city'},
@@ -32,6 +33,7 @@ const components_data = [
     {name: 'contact-channel-detail'},
     {name: 'contact-channel'},
     {name: 'opportunity'},
+    {name: 'files'},
 ]
 
 async function ComponentsMigration() {

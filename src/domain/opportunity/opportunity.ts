@@ -8,7 +8,6 @@ export class Opportunity {
     postulation_date: number;
     tentative_enrollment_date: number;
     termination_motive: number;
-    competitor: string;
     migration_code: string;
     last_interaction: string;
     interest_level: number;
@@ -18,6 +17,7 @@ export class Opportunity {
     deleted: boolean;
     updatedAt: number;
     createdAt: number;
+    competitor_id: string;
     contact_id: string;
     career_id: string;
     period_id: string;
@@ -34,7 +34,7 @@ export class Opportunity {
         this.postulation_date = opportunity.postulation_date;
         this.tentative_enrollment_date = opportunity.tentative_enrollment_date;
         this.termination_motive = opportunity.termination_motive;
-        this.competitor = opportunity.competitor;
+        this.competitor_id = opportunity.competitor_id;
         this.migration_code = opportunity.migration_code;
         this.last_interaction = opportunity.last_interaction;
         this.interest_level = opportunity.interest_level;

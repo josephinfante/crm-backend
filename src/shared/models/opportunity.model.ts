@@ -8,6 +8,7 @@ import { CampusModel } from "./campus.model";
 import { BusinessUnitModel } from "./business-unit.model";
 import { SalePhaseModel } from "./sale-phase.model";
 import { ContactChannelModel } from "./contact-channel.model";
+import { CollegeModel } from "./college.model";
 
 export const OpportunityModel = database.define("opportunities", {
     id: {
@@ -37,10 +38,6 @@ export const OpportunityModel = database.define("opportunities", {
     },
     termination_motive: {
         type: DataTypes.BIGINT,
-        allowNull: false,
-    },
-    competitor: {
-        type: DataTypes.STRING,
         allowNull: false,
     },
     migration_code: {
@@ -139,6 +136,14 @@ export const OpportunityModel = database.define("opportunities", {
             key: 'id',
         },
     },
+    competitor_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        references: {
+            model: CollegeModel,
+            key: 'id',
+        },
+    },
     user_id: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -155,4 +160,5 @@ OpportunityModel.hasOne(CampusModel, { foreignKey: 'id', sourceKey: 'campus_id' 
 OpportunityModel.hasOne(BusinessUnitModel, { foreignKey: 'id', sourceKey: 'business_unit_id' });
 OpportunityModel.hasOne(SalePhaseModel, { foreignKey: 'id', sourceKey: 'sale_phase_id' });
 OpportunityModel.hasOne(ContactChannelModel, { foreignKey: 'id', sourceKey: 'contact_channel_id' });
+OpportunityModel.hasOne(CollegeModel, { foreignKey: 'id', sourceKey: 'competitor_id', as : 'competitor' });
 UserModel.hasMany(OpportunityModel, { foreignKey: 'user_id', sourceKey: 'id' });

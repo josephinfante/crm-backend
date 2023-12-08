@@ -14,6 +14,7 @@ export * from './degree-specification.model';
 export * from './degree.model';
 export * from './district.model';
 export * from './ethnicity.model';
+export * from './event-control.model';
 export * from './event.model';
 export * from './language.model';
 export * from './menu.model';

@@ -1,5 +1,6 @@
 export interface IAccessPermission {
     user_id: string;
+    user_name: string;
     super_admin: boolean | null;
     role_name: string;
     permission: {

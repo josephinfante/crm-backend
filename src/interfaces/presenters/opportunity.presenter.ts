@@ -2,6 +2,7 @@ import { IAccessPermission } from "../../domain/auth/access.type";
 import { IBusinessUnit } from "../../domain/business-unit/business-unit.type";
 import { ICampus } from "../../domain/campus/campus.type";
 import { ICareer } from "../../domain/career/career.type";
+import { ICollege } from "../../domain/college/college.type";
 import { IcontactChannel } from "../../domain/contact-channel/contact-channel.type";
 import { IContact } from "../../domain/contact/contact.type";
 import { IOpportunity } from "../../domain/opportunity/opportunity.type";
@@ -16,12 +17,15 @@ export interface IOpportunityResponse {
     postulation_date: number,
     tentative_enrollment_date: number,
     termination_motive: number,
-    competitor: string,
     migration_code: string,
     last_interaction: string,
     interest_level: number,
     registration_form_date: number,
     purpose_full_interaction: number,
+    competitor?: {
+        id: string,
+        name: string,
+    }
     contact?: {
         id: string,
         name: string,
@@ -51,13 +55,17 @@ export interface IOpportunityResponse {
         id: string,
         name: string,
     },
+    user?: {
+        id: string,
+        name: string,
+    }
     hidden: boolean,
     deleted?: boolean,
     updatedAt: number,
     createdAt: number,
 }
 
-export function OpportunityPresenter(opportunity: IOpportunity, access: IAccessPermission, contact?: IContact, career?: ICareer, period?: IPeriod, campus?: ICampus, business_unit?: IBusinessUnit, sale_phase?: ISalePhase, contact_channel?: IcontactChannel): IOpportunityResponse {
+export function OpportunityPresenter(opportunity: IOpportunity, access: IAccessPermission, competitor?: ICollege, contact?: IContact, career?: ICareer, period?: IPeriod, campus?: ICampus, business_unit?: IBusinessUnit, sale_phase?: ISalePhase, contact_channel?: IcontactChannel, user?: {id: string, name: string}): IOpportunityResponse {
     return {
         id: opportunity.id,
         reserved_enrollment: opportunity.reserved_enrollment,
@@ -66,12 +74,15 @@ export function OpportunityPresenter(opportunity: IOpportunity, access: IAccessP
         postulation_date: opportunity.postulation_date,
         tentative_enrollment_date: opportunity.tentative_enrollment_date,
         termination_motive: opportunity.termination_motive,
-        competitor: opportunity.competitor,
         migration_code: opportunity.migration_code,
         last_interaction: opportunity.last_interaction,
         interest_level: opportunity.interest_level,
         registration_form_date: opportunity.registration_form_date,
         purpose_full_interaction: opportunity.purpose_full_interaction,
+        competitor: competitor ? {
+            id: competitor.id,
+            name: competitor.name,
+        } : undefined,
         contact: contact ? {
             id: contact.id,
             name: `${contact.first_name} ${contact.last_name_1}`,
@@ -100,6 +111,10 @@ export function OpportunityPresenter(opportunity: IOpportunity, access: IAccessP
         contact_channel: contact_channel ? {
             id: contact_channel.id,
             name: contact_channel.name,
+        } : undefined,
+        user: user ? {
+            id: user.id,
+            name: user.name,
         } : undefined,
         hidden: opportunity.hidden,
         ...((access?.super_admin || access?.permission.read_deleted) && { deleted: opportunity.deleted }),

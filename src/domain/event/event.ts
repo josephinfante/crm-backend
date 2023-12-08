@@ -1,0 +1,66 @@
+import { IEvent } from "./event.type";
+
+export class Event {
+    id: string;
+    name: string;
+    code: string;
+    type: string;
+    address: string;
+    campaign_start_date: number;
+    start_date: number;
+    end_date: number;
+    waiting_time: number;
+    send_sms: boolean;
+    send_email: boolean;
+    registration_from_expected: number;
+    registration_from_delivered: number;
+    registration_from_completed: number;
+    registration_from_incompleted: number;
+    virtual: boolean;
+    pre_inscription_url: string;
+    post_event_url: string;
+    meeting_url: string;
+    survery_url: string;
+    send_survey: boolean;
+    sent_pre_inscription: boolean;
+    inscription_type: string;
+    campus_id: string;
+    college_id: string;
+    hidden: boolean;
+    deleted: boolean;
+    createdAt: number;
+    updatedAt: number;
+    user_id: string | null;
+    constructor(event: IEvent) {
+        this.id = event.id;
+        this.name = event.name;
+        this.code = event.code;
+        this.type = event.type;
+        this.address = event.address;
+        this.campaign_start_date = event.campaign_start_date;
+        this.start_date = event.start_date;
+        this.end_date = event.end_date;
+        this.waiting_time = event.waiting_time;
+        this.send_sms = event.send_sms;
+        this.send_email = event.send_email;
+        this.registration_from_expected = event.registration_from_expected;
+        this.registration_from_delivered = event.registration_from_delivered;
+        this.registration_from_completed = event.registration_from_completed;
+        this.registration_from_incompleted = event.registration_from_incompleted;
+        this.virtual = event.virtual;
+        this.pre_inscription_url = event.pre_inscription_url;
+        this.post_event_url = event.post_event_url;
+        this.meeting_url = event.meeting_url;
+        this.survery_url = event.survery_url;
+        this.send_survey = event.send_survey;
+        this.sent_pre_inscription = event.sent_pre_inscription;
+        this.inscription_type = event.inscription_type;
+        this.campus_id = event.campus_id;
+        this.college_id = event.college_id;
+        this.hidden = event.hidden;
+        this.deleted = event.deleted;
+        this.createdAt = event.createdAt;
+        this.updatedAt = event.updatedAt;
+        this.user_id = event.user_id;
+    }
+}

@@ -207,3 +207,31 @@ export class SalePhaseError extends Error {
         this.name = 'SalePhaseError';
     }
 }
+
+export class ConnectError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'ConnectError';
+    }
+}
+
+export class EventError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'EventError';
+    }
+}
+
+export class EventControlError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'EventControlError';
+    }
+}
+
+export class FileError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'FileError';
+    }
+}

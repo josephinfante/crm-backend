@@ -30,3 +30,6 @@ export * from './state.model';
 export * from './tracking-classification-action.model';
 export * from './tracking-classification.model';
 export * from './user.model';
+export * from './message-template.model';
+export * from './contact-relative.model';
+export * from './value.model';

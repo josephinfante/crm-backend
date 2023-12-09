@@ -235,3 +235,24 @@ export class FileError extends Error {
         this.name = 'FileError';
     }
 }
+
+export class MessageTemplateError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'MessageTemplateError';
+    }
+}
+
+export class ContactRelativeError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'ContactRelativeError';
+    }
+}
+
+export class ValueError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'ValueError';
+    }
+}

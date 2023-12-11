@@ -23,7 +23,7 @@ export const MessageTemplateModel = database.define("message_templates", {
         allowNull: false,
     },
     body: {
-        type: DataTypes.TEXT,
+        type: DataTypes.TEXT, // si es tipo sms solo debe tener 140 carecteres
         allowNull: false,
     },
     cco: {
@@ -31,7 +31,7 @@ export const MessageTemplateModel = database.define("message_templates", {
         allowNull: false,
     },
     type: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING, // PLANTILLA SIMPLE, PLANTLLA DE BIENVENIDA, PLANTILLA DE EVENTO
         allowNull: false,
     },
     hidden: {

@@ -5,7 +5,7 @@ import { MenuError } from "../../shared/errors";
 export class MenuController {
     async findAllPagesByRoleId(_req: Request, res: Response) {
         try {
-            const pages = await FindAllPagesWithRoleId(res.locals.role_id);
+            const pages = await FindAllPagesWithRoleId(res.locals.access, res.locals.role_id);
             res.status(200).json(pages);
         } catch (error) {
             if (error instanceof MenuError) res.status(400).json({error: error.message});

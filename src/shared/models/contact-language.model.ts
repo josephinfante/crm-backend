@@ -10,6 +10,10 @@ export const ContactLanguageModel = database.define("contact_languages", {
         allowNull: false,
         primaryKey: true,
     },
+    native: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+    },
     level: {
         type: DataTypes.STRING,
         allowNull: false,

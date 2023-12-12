@@ -6,6 +6,7 @@ import { DegreeSpecificationModel } from "./degree-specification.model";
 import { EthnicityModel } from "./ethnicity.model";
 import { NationalityModel } from "./nationality.model";
 import { CountryModel } from "./country.model";
+import { DistrictModel } from "./district.model";
 
 export const ContactModel = database.define("contacts", {
     id: {
@@ -26,11 +27,11 @@ export const ContactModel = database.define("contacts", {
         allowNull: true,
     },
     mobile_number: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: true,
     },
     phone_number: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: true,
     },
     document_type: {
@@ -57,14 +58,13 @@ export const ContactModel = database.define("contacts", {
     civil_status: {
         type: DataTypes.STRING,
         allowNull: true,
-        defaultValue: "soltero/a",
     },
     gender: {
         type: DataTypes.STRING,
         allowNull: true,
     },
     graduation_date: {
-        type: DataTypes.DATE,
+        type: DataTypes.BIGINT,
         allowNull: true,
     },
     whatsapp_number: {
@@ -162,6 +162,10 @@ export const ContactModel = database.define("contacts", {
     district_id: {
         type: DataTypes.STRING,
         allowNull: true,
+        references: {
+            model: DistrictModel,
+            key: "id",
+        }
     },
     user_id: {
         type: DataTypes.STRING,
@@ -172,4 +176,10 @@ export const ContactModel = database.define("contacts", {
         },
     },
 });
+ContactModel.hasOne(CollegeModel, { foreignKey: "id", sourceKey: "college_id" });
+ContactModel.hasOne(DegreeSpecificationModel, { foreignKey: "id", sourceKey: "degree_specification_id" });
+ContactModel.hasOne(EthnicityModel, { foreignKey: "id", sourceKey: "ethnicity_id" });
+ContactModel.hasOne(NationalityModel, { foreignKey: "id", sourceKey: "nationality_id" });
+ContactModel.hasOne(CountryModel, { foreignKey: "id", sourceKey: "country_id" });
+ContactModel.hasOne(DistrictModel, { foreignKey: "id", sourceKey: "district_id" });
 UserModel.hasMany(ContactModel, { foreignKey: "user_id", sourceKey: "id" });

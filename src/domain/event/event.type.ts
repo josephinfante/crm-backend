@@ -9,10 +9,10 @@ export interface ICreateEvent {
     waiting_time: number;
     send_sms: boolean;
     send_email: boolean;
-    registration_from_expected: number;
-    registration_from_delivered: number;
-    registration_from_completed: number;
-    registration_from_incompleted: number;
+    registration_form_expected: number;
+    registration_form_delivered: number;
+    registration_form_completed: number;
+    registration_form_incompleted: number;
     virtual: boolean;
     pre_inscription_url: string;
     post_event_url: string;

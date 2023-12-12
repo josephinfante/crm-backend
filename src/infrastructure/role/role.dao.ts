@@ -6,7 +6,7 @@ import { RoleModel } from "../../shared/models";
 import { PageModel } from "../../shared/models/page.model";
 import { ListCondition, UniqueID } from "../../shared/utils";
 import { FindComponentById } from "../component/component.dao";
-import { CreateMenu, DeleteMenu, FindPageWithMenu, UpdateMenu } from "../menu/menu.dao";
+import { CreateMenu, DeleteMenu, FindAllPagesWithRoleId, UpdateMenu } from "../menu/menu.dao";
 import { CreatePermission, DeletePermission, FindComponentWithPermission, UpdatePermission } from "../permission/permission.dao";
 
 class RoleDao {
@@ -189,7 +189,7 @@ class RoleDao {
 
             const roleResponses: IRoleResponse[] = await Promise.all(
                 roles.map(async (role) => {
-                    const pagesWithMenu = await FindPageWithMenu(access, role.dataValues.id);
+                    const pagesWithMenu = await FindAllPagesWithRoleId(role.dataValues.id);
                     const componentsWithPermission = await FindComponentWithPermission(access, role.dataValues.id);
 
                     return {

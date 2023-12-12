@@ -17,7 +17,7 @@ export class ValueCrudUseCase {
     async findById(access: IAccessPermission, id: string): Promise<IValueResponse> {
         return await this.valueRepository.findById(access, id);
     }
-    async findAll(access: IAccessPermission): Promise<IValueResponse[]> {
-        return await this.valueRepository.findAll(access);
+    async findAll(access: IAccessPermission, hidden?: boolean): Promise<IValueResponse[]> {
+        return await this.valueRepository.findAll(access, hidden);
     }
 }

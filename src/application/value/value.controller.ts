@@ -34,9 +34,9 @@ export class ValueController {
             else res.status(500).json({error: 'Ha ocurrido un error al eliminar el detalle del canal de contacto.'});
         }
     }
-    async findAll(_req: Request, res: Response) {
+    async findAll(req: Request, res: Response) {
         try {
-            const values = await this.value.findAll(res.locals.access);
+            const values = await this.value.findAll(res.locals.access, Boolean(req.query.hidden));
             res.status(200).json(values);
         } catch (error) {
             if (error instanceof ValueError) res.status(400).json({error: error.message});

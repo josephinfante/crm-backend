@@ -31,12 +31,22 @@ class ConnectDao {
 
             if (contact) {
                 // Search las updated opportunity from contact
-                const last_opportunity = await OpportunityModel.findOne({
+                let last_opportunity = await OpportunityModel.findOne({
                         where: { contact_id: contact.dataValues.id },
                         order: [['updatedAt', 'DESC']]
                     })
                     .then(last_opportunity => last_opportunity)
                     .catch((_error) => { throw new Error("Ha ocurrido un error al tratar de buscar la oportunidad") });
+
+                if (!last_opportunity) {
+                    last_opportunity = await OpportunityModel.create({
+                            id: UniqueID.generate(),
+                            contact_id: contact.dataValues.id,
+                            user_id: SUPER_ADMIN_ID,
+                        })
+                        .then(last_opportunity => last_opportunity)
+                        .catch((_error) => { throw new Error("Ha ocurrido un error al tratar de crear la oportunidad") });
+                }
 
                 await InteractionFlow(connect, phone as string, last_opportunity?.dataValues.id);
                 return;

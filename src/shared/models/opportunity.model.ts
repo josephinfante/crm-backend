@@ -18,47 +18,47 @@ export const OpportunityModel = database.define("opportunities", {
     },
     reserved_enrollment: {
         type: DataTypes.BIGINT,
-        allowNull: false,
+        allowNull: true,
     },
     reserved_period: {
         type: DataTypes.BIGINT,
-        allowNull: false,
+        allowNull: true,
     },
     postulation_type: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     postulation_date: {
         type: DataTypes.BIGINT,
-        allowNull: false,
+        allowNull: true,
     },
     tentative_enrollment_date: {
         type: DataTypes.BIGINT,
-        allowNull: false,
+        allowNull: true,
     },
     termination_motive: {
         type: DataTypes.BIGINT,
-        allowNull: false,
+        allowNull: true,
     },
     migration_code: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     last_interaction: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     interest_level: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
     registration_form_date: {
         type: DataTypes.BIGINT,
-        allowNull: false,
+        allowNull: true,
     },
     purpose_full_interaction: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
     hidden: {
         type: DataTypes.BOOLEAN,
@@ -90,7 +90,7 @@ export const OpportunityModel = database.define("opportunities", {
     },
     career_id: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         references: {
             model: CareerModel,
             key: 'id',
@@ -98,7 +98,7 @@ export const OpportunityModel = database.define("opportunities", {
     },
     period_id: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         references: {
             model: PeriodModel,
             key: 'id',
@@ -106,7 +106,7 @@ export const OpportunityModel = database.define("opportunities", {
     },
     campus_id: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         references: {
             model: CampusModel,
             key: 'id',
@@ -114,7 +114,7 @@ export const OpportunityModel = database.define("opportunities", {
     },
     business_unit_id: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         references: {
             model: BusinessUnitModel,
             key: 'id',
@@ -122,7 +122,7 @@ export const OpportunityModel = database.define("opportunities", {
     },
     sale_phase_id: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         references: {
             model: SalePhaseModel,
             key: 'id',
@@ -130,7 +130,7 @@ export const OpportunityModel = database.define("opportunities", {
     },
     contact_channel_id: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         references: {
             model: ContactChannelModel,
             key: 'id',
@@ -138,7 +138,7 @@ export const OpportunityModel = database.define("opportunities", {
     },
     competitor_id: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         references: {
             model: CollegeModel,
             key: 'id',

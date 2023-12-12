@@ -1,11 +1,11 @@
 import { Op } from "sequelize";
 import { IAccessPermission } from "../../domain/auth/access.type";
-import { ContactLanguage } from "../../domain/contanct-language/contact-language";
+import { ContactLanguage } from "../../domain/contact-language/contact-language";
 import { UniqueID } from "../../shared/utils";
 import { ContactLanguageError } from "../../shared/errors";
 import { ContactLanguageModel, LanguageModel } from "../../shared/models";
 import { ContactLanguagePresenter } from "../../interfaces/presenters/contact-language.presenter";
-import { ICreateContactLanguage } from "../../domain/contanct-language/contact-language.type";
+import { ICreateContactLanguage } from "../../domain/contact-language/contact-language.type";
 
 export async function CreateContactLanguage(access: IAccessPermission, contact_language: ICreateContactLanguage) {
     try {
@@ -40,7 +40,7 @@ export async function CreateContactLanguage(access: IAccessPermission, contact_l
                 defaults: new_contact_language
             })
             .then(contact_language => contact_language)
-            .catch((_error) => { throw new ContactLanguageError(_error.message??"Ha ocurrido un error al tratar de crear el idioma del contacto.") });
+            .catch((_error) => { throw new ContactLanguageError("Ha ocurrido un error al tratar de crear el idioma del contacto.") });
         if (!created) throw new ContactLanguageError('El idioma del contacto con los datos proporcionados ya existe.');
         return ContactLanguagePresenter(new_contact_language, language_exist.dataValues);
     } catch (error) {

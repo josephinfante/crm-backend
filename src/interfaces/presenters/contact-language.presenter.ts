@@ -1,4 +1,4 @@
-import { IContactLanguage } from "../../domain/contanct-language/contact-language.type";
+import { IContactLanguage } from "../../domain/contact-language/contact-language.type";
 import { ILanguage } from "../../domain/language/language.type";
 
 export interface IContactLanguageResponse {

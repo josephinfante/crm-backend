@@ -10,7 +10,7 @@ import { SignJWT } from "jose";
 import { IUserResponse, UserPresenter } from "../../interfaces/presenters/user.presenter";
 import { IRole } from "../../domain/role/role.type";
 import { GetPermissionsByRoleId } from "../permission/permission.dao";
-import { FindAllPagesWithRoleId } from "../menu/menu.dao";
+import { FindAllMenusWithRoleId } from "../menu/menu.dao";
 
 class UserDao {
     async create(access: IAccessPermission, user: User): Promise<IUserResponse> {
@@ -220,7 +220,7 @@ class UserDao {
             if (!password_match) throw new UserError('La contraseña es incorrecta.');
 
             const permissions = await GetPermissionsByRoleId(user.dataValues.role_id);
-            const pages = await FindAllPagesWithRoleId(user.dataValues, user.dataValues.role_id);
+            const pages = await FindAllMenusWithRoleId(user.dataValues, user.dataValues.role_id);
 
             const roleName = user.dataValues.role?.name;
             const secretKey: Uint8Array = new TextEncoder().encode(JWT_SECRET);

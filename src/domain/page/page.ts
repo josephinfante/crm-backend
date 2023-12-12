@@ -3,7 +3,7 @@ import { IPage } from "./page.type";
 export class Page {
     id: string;
     name: string;
-    internal_url: string;
+    internal_url: string | null;
     external_url: string;
     hidden: boolean;
     deleted: boolean;

@@ -6,8 +6,8 @@ export class Degree {
     public code: string;
     public hidden: boolean;
     public deleted: boolean;
-    public updatedAt: Date;
-    public createdAt: Date;
+    public updatedAt: number;
+    public createdAt: number;
     public user_id: string | null;
     constructor(degree: IDegree) {
         this.id = degree.id;

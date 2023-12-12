@@ -10,7 +10,7 @@ export class FileController {
     async upload(req: Request, res: Response) {
         try {
             const static_directory = `${req.protocol}://${req.get("host")}`;
-            const files = req.files?.files ?? req.files?.file;
+            const files = (req.files?.files ?? req.files?.file) as any;
 
             if (!files) {
                 res.status(400).json({ error: 'No hay archivos proporcionados.' });

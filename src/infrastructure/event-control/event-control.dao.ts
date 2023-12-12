@@ -1,7 +1,7 @@
 import { IAccessPermission } from "../../domain/auth/access.type";
 import { EventControl } from "../../domain/event-control/event-control";
 import { EventControlPresenter, IEventControlResponse } from "../../interfaces/presenters/event-control.presenter";
-import { EventControlError, EventError } from "../../shared/errors";
+import { ContactError, EventControlError, EventError } from "../../shared/errors";
 import { ContactModel, EventControlModel, EventModel, OpportunityModel } from "../../shared/models";
 import { ListCondition, UniqueID } from "../../shared/utils";
 
@@ -12,31 +12,40 @@ class EventControlDao {
             let contact;
             let opportunity;
             if (event_control.event_id) {
-                event = access.super_admin === true ?
-                    await EventModel.findByPk(event_control.event_id)
-                        .then(event => event)
-                        .catch(_error => { throw new EventError("El evento proporcionado no existe.") }) :
-                    await EventModel.findOne({ where: { id: event_control.event_id, user_id: access.user_id } })
-                        .then(event => event)
-                        .catch(_error => { throw new EventError("El evento proporcionado no existe.") });
+                event = await EventModel.findOne({
+                        where: [
+                            { id: event_control.event_id },
+                            ...(access.super_admin === false ? [{ user_id: access.user_id }] : [])
+                        ]
+                    })
+                    .then(event => event)
+                    .catch(_error => { throw new EventError("Ha ocurrido un error al revisar el evento.") });
+                    
+                if (!event) throw new EventError("El evento proporcionado no existe.");
             }
             if (event_control.contact_id) {
-                contact = access.super_admin === true ?
-                    await ContactModel.findByPk(event_control.contact_id)
-                        .then(event => event)
-                        .catch(_error => { throw new EventError("El contacto proporcionado no existe.") }) :
-                    await ContactModel.findOne({ where: { id: event_control.contact_id, user_id: access.user_id } })
-                        .then(event => event)
-                        .catch(_error => { throw new EventError("El contacto proporcionado no existe.") });
+                contact = await ContactModel.findOne({
+                        where: [
+                            { id: event_control.contact_id },
+                            ...(access.super_admin === false ? [{ user_id: access.user_id }] : [])
+                        ]
+                    })
+                    .then(contact => contact)
+                    .catch(_error => { throw new ContactError("Ha ocurrido un error al revisar el contacto.") });
+
+                if (!contact) throw new ContactError("El contacto proporcionado no existe.");
             }
             if (event_control.opportunity_id) {
-                opportunity = access.super_admin === true ?
-                    await OpportunityModel.findByPk(event_control.opportunity_id)
-                        .then(event => event)
-                        .catch(_error => { throw new EventError("La oportunidad proporcionada no existe.") }) :
-                    await OpportunityModel.findOne({ where: { id: event_control.opportunity_id, user_id: access.user_id } })
-                        .then(event => event)
-                        .catch(_error => { throw new EventError("La oportunidad proporcionada no existe.") });
+                opportunity = await OpportunityModel.findOne({
+                        where: [
+                            { id: event_control.opportunity_id },
+                            ...(access.super_admin === false ? [{ user_id: access.user_id }] : [])
+                        ]
+                    })
+                    .then(opportunity => opportunity)
+                    .catch(_error => { throw new EventError("Ha ocurrido un error al revisar la oportunidad.") });
+
+                if (!opportunity) throw new EventError("La oportunidad proporcionada no existe.");
             }
             const new_event_control = {
                 id: UniqueID.generate(),

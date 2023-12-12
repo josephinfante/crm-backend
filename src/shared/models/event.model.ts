@@ -4,7 +4,7 @@ import { UserModel } from "./user.model";
 import { CollegeModel } from "./college.model";
 import { CampusModel } from "./campus.model";
 
-export const EventModel = database.define("event", {
+export const EventModel = database.define("events", {
     id: {
         type: DataTypes.STRING,
         primaryKey: true,
@@ -50,19 +50,19 @@ export const EventModel = database.define("event", {
         type: DataTypes.BOOLEAN,
         allowNull: false,
     },
-    registration_from_expected: {
+    registration_form_expected: {
         type: DataTypes.BIGINT,
         allowNull: false,
     },
-    registration_from_delivered: {
+    registration_form_delivered: {
         type: DataTypes.BIGINT,
         allowNull: false,
     },
-    registration_from_completed: {
+    registration_form_completed: {
         type: DataTypes.BIGINT,
         allowNull: false,
     },
-    registration_from_incompleted: {
+    registration_form_incompleted: {
         type: DataTypes.BIGINT,
         allowNull: false,
     },

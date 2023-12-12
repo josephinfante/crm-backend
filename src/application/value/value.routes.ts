@@ -10,7 +10,8 @@ const valueCrudUseCase = new ValueCrudUseCase(valueRepository);
 const valueController = new ValueController(valueCrudUseCase);
 
 valueRouter.post("/v1/value", Access.canCreate(['value']), valueController.create.bind(valueController));
+valueRouter.get("/v1/value", Access.canRead(['value']), valueController.findAll.bind(valueController));
 valueRouter.put("/v1/value/:id", Access.canUpdate(['value']), valueController.update.bind(valueController));
 valueRouter.delete("/v1/value/:id", Access.canDelete(['value']), valueController.delete.bind(valueController));
-valueRouter.get("/v1/value/:id", valueController.findAll.bind(valueController));
+valueRouter.get("/v1/value/:id", Access.canRead(['value']), valueController.findById.bind(valueController));
 export default valueRouter;

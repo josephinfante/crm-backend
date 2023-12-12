@@ -43,4 +43,13 @@ export class MessageTemplateController {
             else res.status(500).json({error: 'Ha ocurrido un error al obtener los semestres académicos.'});
         }
     }
+    async findAll(_req: Request, res: Response) {
+        try {
+            const message_templates = await this.message_template.findAll(res.locals.access);
+            res.status(200).json(message_templates);
+        } catch (error) {
+            if (error instanceof MessageTemplateError) res.status(400).json({error: error.message});
+            else res.status(500).json({error: 'Ha ocurrido un error al obtener los semestres académicos.'});
+        }
+    }
 }

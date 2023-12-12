@@ -17,4 +17,7 @@ export class MessageTemplateCrudUseCase {
     async findById(access: IAccessPermission, id: string): Promise<IMessageTemplateResponse> {
         return this.messageTemplateRepository.findById(access, id);
     }
+    async findAll(access: IAccessPermission): Promise<IMessageTemplateResponse[]> {
+        return this.messageTemplateRepository.findAll(access);
+    }
 }

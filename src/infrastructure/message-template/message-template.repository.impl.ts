@@ -17,4 +17,7 @@ export class MessageTemplateRepositoryImpl implements MessageTemplateRepository 
     findById(access: IAccessPermission, id: string): Promise<IMessageTemplateResponse> {
         return messageTemplateDao.findById(access, id);
     }
+    findAll(access: IAccessPermission): Promise<IMessageTemplateResponse[]> {
+        return messageTemplateDao.findAll(access);
+    }
 }

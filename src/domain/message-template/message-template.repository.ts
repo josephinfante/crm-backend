@@ -7,4 +7,5 @@ export interface MessageTemplateRepository {
     update(access: IAccessPermission, id: string, message_template: MessageTemplate): Promise<IMessageTemplateResponse>;
     delete(access: IAccessPermission, id: string): Promise<string | void>;
     findById(access: IAccessPermission, id: string): Promise<IMessageTemplateResponse>;
+    findAll(access: IAccessPermission): Promise<IMessageTemplateResponse[]>;
 }

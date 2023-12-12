@@ -20,15 +20,15 @@ export interface IBusinessUnitResponse {
     updatedAt: number;
 }
 
-export function BusinessUnitPresenter(business_unit: IBusinessUnit, access: IAccessPermission, degree?: IDegree): IBusinessUnitResponse {
+export function BusinessUnitPresenter(business_unit: IBusinessUnit, access: IAccessPermission, degree: IDegree): IBusinessUnitResponse {
     return {
         id: business_unit.id,
         name: business_unit.name,
         nickname: business_unit.nickname,
         code: business_unit.code,
-        degree: {
-            id: degree?.id || "",
-            name: degree?.name || "",
+        degree: degree && {
+            id: degree.id,
+            name: degree.name,
         },
         current_period: business_unit.current_period,
         default_career: business_unit.default_career,

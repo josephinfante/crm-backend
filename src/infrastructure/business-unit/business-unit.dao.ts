@@ -9,6 +9,17 @@ import { BusinessUnitModel, DegreeModel } from "../../shared/models";
 class BusinessUnitDao {
     async create(access: IAccessPermission, business_unit: BusinessUnit): Promise<IBusinessUnitResponse> {
         try {
+            const degree_exist = await DegreeModel.findOne({ 
+                    where: [
+                        { id: business_unit.degree_id },
+                        ...(access.super_admin === false ? [{ user_id: access.user_id }] : []),
+                    ]
+                })
+                .then(degree => degree)
+                .catch((_error) => { throw new BusinessUnitError("Ha ocurrido un error al revisar el grado académico.") });
+
+            if (!degree_exist) throw new BusinessUnitError("El grado académico proporcionado no existe.");
+
             const new_business_unit = {
                 id: UniqueID.generate(),
                 name: business_unit.name,
@@ -39,7 +50,7 @@ class BusinessUnitDao {
 
             if (!created) throw new BusinessUnitError("La unidad de negocio ya existe.");
 
-            return BusinessUnitPresenter(new_business_unit, access);
+            return BusinessUnitPresenter(new_business_unit, access, degree_exist.dataValues);
         } catch (error) {
             if (error instanceof Error && error.message) throw new BusinessUnitError(error.message);
             else throw new Error("Ha ocurrido un error al crear la unidad de negocio.");
@@ -47,15 +58,18 @@ class BusinessUnitDao {
     }
     async update(access: IAccessPermission, id: string, business_unit: BusinessUnit): Promise<IBusinessUnitResponse> {
         try {
-            const business_unit_exist = access.super_admin === true ?
-                await BusinessUnitModel.findOne({ where: { id: id } })
-                    .then(business_unit => business_unit)
-                    .catch((_error) => { throw new BusinessUnitError("Ha ocurrido un error al revisar la unidad de negocio.") }) :
-                await BusinessUnitModel.findOne({ where: { id: id, user_id: access.user_id } })
-                    .then(business_unit => business_unit)
-                    .catch((_error) => { throw new BusinessUnitError("Ha ocurrido un error al revisar la unidad de negocio.") });
+            let degree;
+            const business_unit_exist = await BusinessUnitModel.findOne({
+                    where: [
+                        { id: id },
+                        ...(access.super_admin === false ? [{ user_id: access.user_id }] : []),
+                    ],
+                    include: [{ model: DegreeModel }]
+                })
+                .then(business_unit => business_unit)
+                .catch((_error) => { throw new BusinessUnitError("Ha ocurrido un error al revisar la unidad de negocio.") });
 
-            if (!business_unit_exist) throw new BusinessUnitError("La unidad de negocio no existe.");
+            if (!business_unit_exist) throw new BusinessUnitError(`La unidad de negocio con ID ${id} no existe.`);
 
             const business_unit_coincidence = (business_unit.name !== business_unit_exist.dataValues.name || business_unit.nickname !== business_unit_exist.dataValues.nickname || business_unit.code !== business_unit_exist.dataValues.code) ? 
                 await BusinessUnitModel.findAll({
@@ -68,7 +82,6 @@ class BusinessUnitDao {
                                         {code: business_unit.code},
                                     ]
                                 },
-                                ...(access.super_admin === false ? [{ user_id: access.user_id }] : []),
                                 { id: { [Op.ne]: id } }
                             ]
                         }
@@ -77,6 +90,17 @@ class BusinessUnitDao {
                     .catch((_error) => { throw new BusinessUnitError("Ha ocurrido un error al revisar las unidades de negocio.") }) : [];
 
             if (business_unit_coincidence.length > 0) throw new BusinessUnitError("Ya existe una unidad de negocio con los datos proporcionados.");
+
+            degree = (business_unit.degree_id !== business_unit_exist.dataValues.degree.dataValues.id) ?
+                await DegreeModel.findOne({ 
+                        where: [
+                            { id: business_unit.degree_id },
+                            ...(access.super_admin === false ? [{ user_id: access.user_id }] : []),
+                        ]
+                    })
+                    .then(degree => degree)
+                    .catch((_error) => { throw new BusinessUnitError("Ha ocurrido un error al revisar el grado académico.") }) :
+                    business_unit_exist.dataValues.degree;
 
             business_unit_exist.set({
                 name: business_unit.name ?? business_unit_exist.dataValues.name,
@@ -87,14 +111,14 @@ class BusinessUnitDao {
                 next_period: business_unit.next_period ?? business_unit_exist.dataValues.next_period,
                 hidden: business_unit.hidden ?? business_unit_exist.dataValues.hidden,
                 updatedAt: Date.now(),
-                degree_id: business_unit.degree_id ?? business_unit_exist.dataValues.degree_id,
+                degree_id: degree.dataValues.id,
             });
 
             const updated = await business_unit_exist.save()
                 .then(business_unit => business_unit)
                 .catch((_error) => { throw new BusinessUnitError("Ha ocurrido un error al actualizar la unidad de negocio.") });
 
-            return BusinessUnitPresenter(updated.dataValues, access);
+            return BusinessUnitPresenter(updated.dataValues, access, degree.dataValues);
         } catch (error) {
             if (error instanceof Error && error.message) throw new BusinessUnitError(error.message);
             else throw new Error("Ha ocurrido un error al actualizar la unidad de negocio.");
@@ -102,15 +126,16 @@ class BusinessUnitDao {
     }
     async delete(access: IAccessPermission, id: string): Promise<string | void> {
         try {
-            const business_unit_exist = access.super_admin === true ?
-                await BusinessUnitModel.findOne({ where: { id: id } })
-                    .then(business_unit => business_unit)
-                    .catch((_error) => { throw new BusinessUnitError("Ha ocurrido un error al revisar la unidad de negocio.") }) :
-                await BusinessUnitModel.findOne({ where: { id: id, user_id: access.user_id } })
-                    .then(business_unit => business_unit)
-                    .catch((_error) => { throw new BusinessUnitError("Ha ocurrido un error al revisar la unidad de negocio.") });
+            const business_unit_exist = await BusinessUnitModel.findOne({
+                    where: [
+                        { id: id },
+                        ...(access.super_admin === false ? [{ user_id: access.user_id }] : []),
+                    ],
+                })
+                .then(business_unit => business_unit)
+                .catch((_error) => { throw new BusinessUnitError("Ha ocurrido un error al revisar la unidad de negocio.") });
 
-            if (!business_unit_exist) throw new BusinessUnitError("La unidad de negocio no existe.");
+            if (!business_unit_exist) throw new BusinessUnitError(`La unidad de negocio con ID ${id} no existe.`);
 
             business_unit_exist.set({
                 deleted: true,

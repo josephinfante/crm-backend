@@ -235,3 +235,17 @@ export class FileError extends Error {
         this.name = 'FileError';
     }
 }
+
+export class InteractionError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'InteractionError';
+    }
+}
+
+export class InteractionMessageError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'InteractionMessageError';
+    }
+}

@@ -220,7 +220,7 @@ class UserDao {
             if (!password_match) throw new UserError('La contraseña es incorrecta.');
 
             const permissions = await GetPermissionsByRoleId(user.dataValues.role_id);
-            const pages = await FindAllPagesWithRoleId(user.dataValues.role_id);
+            const pages = await FindAllPagesWithRoleId(user.dataValues, user.dataValues.role_id);
 
             const roleName = user.dataValues.role?.name;
             const secretKey: Uint8Array = new TextEncoder().encode(JWT_SECRET);

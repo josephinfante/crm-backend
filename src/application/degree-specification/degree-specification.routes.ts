@@ -9,8 +9,8 @@ const degreeSpecificationRepository = new DegreeSpecificationRepositoryImpl();
 const degreeSpecificationCrudUseCase = new DegreeSpecificationCrudUseCase(degreeSpecificationRepository);
 const degreeSpecificationController = new DegreeSpecificationController(degreeSpecificationCrudUseCase);
 
-degreeSpecificationRouter.post("/v1/degree-specification", Access.canCreate('degree-specification'), degreeSpecificationController.create.bind(degreeSpecificationController));
-degreeSpecificationRouter.put("/v1/degree-specification/:id", Access.canUpdate('degree-specification'), degreeSpecificationController.update.bind(degreeSpecificationController));
-degreeSpecificationRouter.delete("/v1/degree-specification/:id", Access.canDelete('degree-specification'), degreeSpecificationController.delete.bind(degreeSpecificationController));
-degreeSpecificationRouter.get("/v1/degree-specification/:degree_id", Access.canRead('degree-specification'), degreeSpecificationController.findByDegreeId.bind(degreeSpecificationController));
+degreeSpecificationRouter.post("/v1/degree-specification", Access.canCreate(['degree-specification']), degreeSpecificationController.create.bind(degreeSpecificationController));
+degreeSpecificationRouter.put("/v1/degree-specification/:id", Access.canUpdate(['degree-specification']), degreeSpecificationController.update.bind(degreeSpecificationController));
+degreeSpecificationRouter.delete("/v1/degree-specification/:id", Access.canDelete(['degree-specification']), degreeSpecificationController.delete.bind(degreeSpecificationController));
+degreeSpecificationRouter.get("/v1/degree-specification/:degree_id", Access.canRead(['degree-specification']), degreeSpecificationController.findByDegreeId.bind(degreeSpecificationController));
 export default degreeSpecificationRouter;

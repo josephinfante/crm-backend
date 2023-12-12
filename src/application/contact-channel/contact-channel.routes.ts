@@ -9,8 +9,8 @@ const contactChannelRepository = new ContactChannelRepositoryImpl();
 const contactChannelCrudUseCase = new ContactChannelCrudUseCase(contactChannelRepository);
 const contactChannelController = new ContactChannelController(contactChannelCrudUseCase);
 
-contactChannelRouter.post("/v1/contact-channel", Access.canCreate('contact-channel'), contactChannelController.create.bind(contactChannelController));
-contactChannelRouter.put("/v1/contact-channel/:id", Access.canUpdate('contact-channel'), contactChannelController.update.bind(contactChannelController));
-contactChannelRouter.delete("/v1/contact-channel/:id", Access.canDelete('contact-channel'), contactChannelController.delete.bind(contactChannelController));
-contactChannelRouter.get("/v1/contact-channels", Access.canRead('contact-channel'), contactChannelController.findAll.bind(contactChannelController));
+contactChannelRouter.post("/v1/contact-channel", Access.canCreate(['contact-channel']), contactChannelController.create.bind(contactChannelController));
+contactChannelRouter.put("/v1/contact-channel/:id", Access.canUpdate(['contact-channel']), contactChannelController.update.bind(contactChannelController));
+contactChannelRouter.delete("/v1/contact-channel/:id", Access.canDelete(['contact-channel']), contactChannelController.delete.bind(contactChannelController));
+contactChannelRouter.get("/v1/contact-channels", Access.canRead(['contact-channel']), contactChannelController.findAll.bind(contactChannelController));
 export default contactChannelRouter;

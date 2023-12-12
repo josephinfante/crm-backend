@@ -9,9 +9,9 @@ const pageRepository = new PageRepositoryImpl();
 const pageCrudUseCase = new PageCrudUseCase(pageRepository);
 const pageController = new PageController(pageCrudUseCase);
 
-pageRouter.post("/v1/page", Access.canCreate('page'), pageController.create.bind(pageController));
-pageRouter.put("/v1/page/:id", Access.canUpdate('page'), pageController.update.bind(pageController));
-pageRouter.delete("/v1/page/:id", Access.canDelete('page'), pageController.delete.bind(pageController));
-pageRouter.get("/v1/page/:id", Access.canRead('page'), pageController.findById.bind(pageController));
-pageRouter.get("/v1/pages", Access.canRead('page'), pageController.findAll.bind(pageController));
+pageRouter.post("/v1/page", Access.canCreate(['page']), pageController.create.bind(pageController));
+pageRouter.put("/v1/page/:id", Access.canUpdate(['page']), pageController.update.bind(pageController));
+pageRouter.delete("/v1/page/:id", Access.canDelete(['page']), pageController.delete.bind(pageController));
+pageRouter.get("/v1/page/:id", Access.canRead(['page']), pageController.findById.bind(pageController));
+pageRouter.get("/v1/pages", Access.canRead(['page']), pageController.findAll.bind(pageController));
 export default pageRouter;

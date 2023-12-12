@@ -9,9 +9,9 @@ const eventControlRepository = new EventControlRepositoryImpl();
 const eventControlCrudUseCase = new EventControlCrudUseCase(eventControlRepository);
 const eventControlController = new EventControlController(eventControlCrudUseCase);
 
-eventControlRouter.post("/v1/event-control", Access.canCreate('event-control'), eventControlController.create.bind(eventControlController));
-eventControlRouter.put("/v1/event-control/:id", Access.canUpdate('event-control'), eventControlController.update.bind(eventControlController));
-eventControlRouter.delete("/v1/event-control/:id", Access.canDelete('event-control'), eventControlController.delete.bind(eventControlController));
-eventControlRouter.get("/v1/event-control/:id", Access.canRead('event-control'), eventControlController.findById.bind(eventControlController));
-eventControlRouter.get("/v1/event-controls", Access.canRead('event-control'), eventControlController.findAll.bind(eventControlController));
+eventControlRouter.post("/v1/event-control", Access.canCreate(['event-control']), eventControlController.create.bind(eventControlController));
+eventControlRouter.put("/v1/event-control/:id", Access.canUpdate(['event-control']), eventControlController.update.bind(eventControlController));
+eventControlRouter.delete("/v1/event-control/:id", Access.canDelete(['event-control']), eventControlController.delete.bind(eventControlController));
+eventControlRouter.get("/v1/event-control/:id", Access.canRead(['event-control']), eventControlController.findById.bind(eventControlController));
+eventControlRouter.get("/v1/event-controls", Access.canRead(['event-control']), eventControlController.findAll.bind(eventControlController));
 export default eventControlRouter;

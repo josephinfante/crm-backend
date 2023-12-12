@@ -9,9 +9,9 @@ const careerRepository = new CareerRepositoryImpl();
 const careerCrudUseCase = new CareerCrudUseCase(careerRepository);
 const careerController = new CareerController(careerCrudUseCase);
 
-careerRouter.post("/v1/career", Access.canCreate('career'), careerController.create.bind(careerController));
-careerRouter.put("/v1/career/:id", Access.canUpdate('career'), careerController.update.bind(careerController));
-careerRouter.delete("/v1/career/:id", Access.canDelete('career'), careerController.delete.bind(careerController));
-careerRouter.get("/v1/career/:school_id", Access.canRead('career'), careerController.findBySchoolId.bind(careerController));
-careerRouter.get("/v1/careers", Access.canRead('career'), careerController.findAll.bind(careerController));
+careerRouter.post("/v1/career", Access.canCreate(['career']), careerController.create.bind(careerController));
+careerRouter.put("/v1/career/:id", Access.canUpdate(['career']), careerController.update.bind(careerController));
+careerRouter.delete("/v1/career/:id", Access.canDelete(['career']), careerController.delete.bind(careerController));
+careerRouter.get("/v1/career/:school_id", Access.canRead(['career', 'opportunity']), careerController.findBySchoolId.bind(careerController));
+careerRouter.get("/v1/careers", Access.canRead(['career', 'opportunity']), careerController.findAll.bind(careerController));
 export default careerRouter;

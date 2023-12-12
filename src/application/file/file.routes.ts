@@ -10,6 +10,6 @@ const fileCrudUseCase = new FileCrudUseCase(fileRepository);
 const fileController = new FileController(fileCrudUseCase);
 
 fileRouter.post("/v1/files", fileController.upload.bind(fileController));
-fileRouter.delete("/v1/files", Access.canDelete('files'), fileController.delete.bind(fileController));
-fileRouter.get("/v1/files", Access.canRead('files'), fileController.findAll.bind(fileController));
+fileRouter.delete("/v1/files", Access.canDelete(['files']), fileController.delete.bind(fileController));
+fileRouter.get("/v1/files", Access.canRead(['files']), fileController.findAll.bind(fileController));
 export default fileRouter;

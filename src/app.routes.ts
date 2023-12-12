@@ -72,7 +72,7 @@ appRouter.use("/api", contactRelativeRouter);
 
 appRouter.get("/uploads/:file_directory_name/:file", async (req: Request, res: Response) => {
     try {
-        res.setHeader('Content-Disposition', `attachment; filename=${req.params}`);
+        res.setHeader('Content-Disposition', `attachment; filename=${req.params.file}`);
         res.sendFile(path.join(__dirname + '../../uploads/', `${req.params.file_directory_name}/${req.params.file}`));
     } catch (error: any) {
         res.status(500).json({ error: error.message });

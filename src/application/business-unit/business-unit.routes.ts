@@ -9,8 +9,8 @@ const businessUnitRepository = new BusinessUnitRepositoryImpl();
 const businessUnitCrudUseCase = new BusinessUnitCrudUseCase(businessUnitRepository);
 const businessUnitController = new BusinessUnitController(businessUnitCrudUseCase);
 
-businessUnitRouter.post("/v1/business-unit", Access.canCreate('business-unit'), businessUnitController.create.bind(businessUnitController));
-businessUnitRouter.put("/v1/business-unit/:id", Access.canUpdate('business-unit'), businessUnitController.update.bind(businessUnitController));
-businessUnitRouter.delete("/v1/business-unit/:id", Access.canDelete('business-unit'), businessUnitController.delete.bind(businessUnitController));
-businessUnitRouter.get("/v1/business-units", Access.canRead('business-unit'), businessUnitController.findAll.bind(businessUnitController));
+businessUnitRouter.post("/v1/business-unit", Access.canCreate(['business-unit']), businessUnitController.create.bind(businessUnitController));
+businessUnitRouter.put("/v1/business-unit/:id", Access.canUpdate(['business-unit']), businessUnitController.update.bind(businessUnitController));
+businessUnitRouter.delete("/v1/business-unit/:id", Access.canDelete(['business-unit']), businessUnitController.delete.bind(businessUnitController));
+businessUnitRouter.get("/v1/business-units", Access.canRead(['business-unit']), businessUnitController.findAll.bind(businessUnitController));
 export default businessUnitRouter;

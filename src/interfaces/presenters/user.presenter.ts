@@ -11,7 +11,7 @@ export interface IUserResponse {
     phone_number: string;
     hidden: boolean;
     deleted?: boolean;
-    role: {
+    role?: {
         id: string;
         name: string;
     };
@@ -31,8 +31,8 @@ export function UserPresenter(user: IUser, role?: { id: string; name: string; },
         hidden: user.hidden,
         ...((access?.super_admin || access?.permission.read_deleted) && { deleted: user.deleted }),
         role: {
-            id: role?.id || '',
-            name: role?.name || '',
+            id: role?.id || "",
+            name: role?.name || "",
         },
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,

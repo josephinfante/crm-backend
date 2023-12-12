@@ -45,7 +45,7 @@ export class UserController {
     }
     async findAll(req: Request, res: Response) {
         try {
-            const response = await this.user.findAll(res.locals.access, Number(req.query.page??1));
+            const response = await this.user.findAll(res.locals.access, Number(req.query.page??1), Boolean(req.query.hidden));
             res.status(200).json(response);
         } catch (error) {
             res.status(500).json({error: 'Ha ocurrido un error al obtener los usuarios.'});

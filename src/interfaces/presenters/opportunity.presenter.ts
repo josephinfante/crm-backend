@@ -79,43 +79,43 @@ export function OpportunityPresenter(opportunity: IOpportunity, access: IAccessP
         interest_level: opportunity.interest_level,
         registration_form_date: opportunity.registration_form_date,
         purpose_full_interaction: opportunity.purpose_full_interaction,
-        competitor: competitor ? {
+        competitor: competitor && {
             id: competitor.id,
             name: competitor.name,
-        } : undefined,
-        contact: contact ? {
+        },
+        contact: contact && {
             id: contact.id,
             name: `${contact.first_name} ${contact.last_name_1}`,
-        } : undefined,
-        career: career ? {
+        },
+        career: career && {
             id: career.id,
             name: career.name,
             code: career.code,
-        } : undefined,
-        period: period ? {
+        },
+        period: period && {
             id: period.id,
             name: period.name,
-        } : undefined,
-        campus: campus ? {
+        },
+        campus: campus && {
             id: campus.id,
             name: campus.name,
-        } : undefined,
-        business_unit: business_unit ? {
+        },
+        business_unit: business_unit && {
             id: business_unit.id,
             name: business_unit.name,
-        } : undefined,
-        sale_phase: sale_phase ? {
+        },
+        sale_phase: sale_phase && {
             id: sale_phase.id,
             name: sale_phase.name,
-        } : undefined,
-        contact_channel: contact_channel ? {
+        },
+        contact_channel: contact_channel && {
             id: contact_channel.id,
             name: contact_channel.name,
-        } : undefined,
-        user: user ? {
+        },
+        user: user && {
             id: user.id,
             name: user.name,
-        } : undefined,
+        },
         hidden: opportunity.hidden,
         ...((access?.super_admin || access?.permission.read_deleted) && { deleted: opportunity.deleted }),
         updatedAt: opportunity.updatedAt,

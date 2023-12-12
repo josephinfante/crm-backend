@@ -18,8 +18,8 @@ export class UserCrudUseCase {
     async findById(access: IAccessPermission, id: string): Promise<IUserResponse> {
         return await this.userRespository.findById(access, id);
     }
-    async findAll(access: IAccessPermission, page: number): Promise<{ users: [], total_users: number, total_pages: number, current_page: number}> {
-        return await this.userRespository.findAll(access, page);
+    async findAll(access: IAccessPermission, page: number, hidden?: boolean): Promise<{ users: [], total_users: number, total_pages: number, current_page: number}> {
+        return await this.userRespository.findAll(access, page, hidden);
     }
     async login(email: string, password: string): Promise<ILogin> {
         return await this.userRespository.login(email, password);

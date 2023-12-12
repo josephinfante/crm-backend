@@ -30,13 +30,10 @@ export async function UpdateMenu(access:IAccessPermission, role_id: string, page
     }
 }
 
-export async function DeleteMenu(access:IAccessPermission, role_id: string) {
+export async function DeleteMenu(_access:IAccessPermission, role_id: string) {
     try {
-        access.super_admin === true ?
-            await MenuModel.destroy({ where: { role_id: role_id } })
-                .catch(_error => {throw new MenuError('Ha ocurrido un error al tratar eliminar el menu.')}) :
-            await MenuModel.destroy({ where: { role_id: role_id, user_id: access.user_id } })
-                .catch(_error => {throw new MenuError('Ha ocurrido un error al tratar eliminar el menu.')});
+        await MenuModel.destroy({ where: { role_id: role_id } })
+                .catch(_error => {throw new MenuError('Ha ocurrido un error al tratar eliminar el menu.')})
     } catch (error) {
         if (error instanceof Error && error.message) throw new MenuError(error.message);
         else throw new Error('Ha ocurrido un error al eliminar el menu.');
@@ -104,11 +101,11 @@ export async function FindAllPagesWithRoleId(role_id: string ): Promise<IRolePag
 
         return menus.map(menu => {
             return {
-                id: menu.dataValues.id,
-                name: menu.dataValues.name,
-                ...(menu.dataValues.external_url && { external_url: menu.dataValues.external_url }),
-                updatedAt: menu.dataValues.updatedAt,
-                createdAt: menu.dataValues.createdAt
+                id: menu.dataValues.page.dataValuesid,
+                name: menu.dataValues.page.dataValues.name,
+                ...(menu.dataValues.page.dataValues.external_url && { external_url: menu.dataValues.page.dataValues.external_url }),
+                updatedAt: menu.dataValues.page.dataValues.updatedAt,
+                createdAt: menu.dataValues.page.dataValues.createdAt
         }});
     } catch (error) {
         if (error instanceof Error && error.message) throw new MenuError(error.message);

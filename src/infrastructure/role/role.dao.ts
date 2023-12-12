@@ -33,10 +33,7 @@ class RoleDao {
                 .catch(_error => { throw new RoleError('Ha ocurrido un error al tratar de crear el rol.') });
             if (!created) throw new RoleError(`El rol ${role.name} ya existe.`);
             for (const page of role.pages) {
-                const page_exists = access.super_admin === true ? await PageModel.findOne({ where: { id: page.id } })
-                    .then(page => page)
-                    .catch(_error => { throw new PageError('Ha ocurrido un error al revisar la página.') }) :
-                    await PageModel.findOne({ where: { id: page.id, user_id: access.user_id } })
+                const page_exists = await PageModel.findOne({ where: { id: page.id } })
                     .then(page => page)
                     .catch(_error => { throw new PageError('Ha ocurrido un error al revisar la página.') });
 

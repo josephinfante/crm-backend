@@ -249,6 +249,30 @@ class MessageTemplateDao {
             else throw new Error("Ha ocurrido un error al buscar la oportunidad.");
         }
     }
+    async findAll(access: IAccessPermission): Promise<IMessageTemplateResponse[]> {
+        try {
+            const message_templates = await MessageTemplateModel.findAll({ 
+                where: [
+                    ...(access.super_admin === false?[{ user_id: access.user_id }]:[]),
+                ],
+                include: [
+                    { model: BusinessUnitModel },
+                    { model: ContactChannelModel },
+                    { model: SalePhaseModel },
+                    { model: CampusModel },
+                    { model: CareerModel },
+                    { model: EventModel },
+                ]
+            })
+            .then(opportunity => opportunity)
+            .catch((_error) => { throw new MessageTemplateError("Ha ocurrido un error al revisar la oportunidad.") });
+
+            return message_templates.map(message_template => MessageTemplatePresenter(message_template.dataValues, access, message_template.dataValues.business_unit?.dataValues, message_template.dataValues.contact_channel?.dataValues, message_template.dataValues.sales_phase?.dataValues, message_template.dataValues.campus?.dataValues, message_template.dataValues.career?.dataValues, message_template.dataValues.event?.dataValues));
+        } catch (error) {
+            if (error instanceof Error && error.message) throw new MessageTemplateError(error.message);
+            else throw new Error("Ha ocurrido un error al buscar la oportunidad.");
+        }
+    }
 }
 const messageTemplateDao = new MessageTemplateDao();
 export default messageTemplateDao;

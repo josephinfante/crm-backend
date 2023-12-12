@@ -17,7 +17,7 @@ export class ValueRepositoryImpl implements ValueRepository {
     findById(access: IAccessPermission, id: string): Promise<IValueResponse> {
         return valueDao.findById(access, id);
     }
-    findAll(access: IAccessPermission): Promise<IValueResponse[]> {
-        return valueDao.findAll(access);
+    findAll(access: IAccessPermission, hidden?: boolean): Promise<IValueResponse[]> {
+        return valueDao.findAll(access, hidden);
     }
 }

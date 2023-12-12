@@ -18,8 +18,8 @@ export class UserRepositoryImpl implements UserRepository {
     findById(access: IAccessPermission, id: string): Promise<IUserResponse> {
         return userDao.findById(access, id);
     }
-    findAll(access: IAccessPermission, page: number): Promise<{ users: []; total_users: number; total_pages: number; current_page: number; }> {
-        return userDao.findAll(access, page);
+    findAll(access: IAccessPermission, page: number, hidden?: boolean): Promise<{ users: []; total_users: number; total_pages: number; current_page: number; }> {
+        return userDao.findAll(access, page, hidden);
     }
     login(email: string, password: string): Promise<ILogin> {
         return userDao.login(email, password);

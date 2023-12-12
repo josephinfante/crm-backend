@@ -7,5 +7,5 @@ export interface ValueRepository {
     update(access: IAccessPermission, id: string, value: Value): Promise<IValueResponse>;
     delete(access: IAccessPermission, id: string): Promise<string | void>;
     findById(access: IAccessPermission, id: string): Promise<IValueResponse>;
-    findAll(access: IAccessPermission): Promise<IValueResponse[]>;
+    findAll(access: IAccessPermission, hidden?: boolean): Promise<IValueResponse[]>;
 }

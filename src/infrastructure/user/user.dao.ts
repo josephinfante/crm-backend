@@ -1,11 +1,11 @@
 import { Op } from "sequelize";
 import { IAccessPermission } from "../../domain/auth/access.type";
 import { User } from "../../domain/user/user";
-import { RoleError, UserError } from "../../shared/errors";
+import { UserError } from "../../shared/errors";
 import { RoleModel, UserModel } from "../../shared/models";
 import { ListCondition, UniqueID, compare_password, encrypt_password } from "../../shared/utils";
 import { ILogin } from "../../domain/auth/login.type";
-import { JWT_SECRET } from "../../../globals";
+import { JWT_SECRET, SUPER_ADMIN_ID } from "../../../globals";
 import { SignJWT } from "jose";
 import { IUserResponse, UserPresenter } from "../../interfaces/presenters/user.presenter";
 import { IRole } from "../../domain/role/role.type";
@@ -16,15 +16,11 @@ class UserDao {
     async create(access: IAccessPermission, user: User): Promise<IUserResponse> {
         try {
             let role: IRole;
-            role = access.super_admin === true ? 
-                await RoleModel.findOne({where: {id: user.role_id}})
+            role = user.role_id && await RoleModel.findOne({where: {id: user.role_id}})
                 .then(role => role?.dataValues)
-                .catch(_error => {throw new RoleError('Ha ocurrido un error al revisar el rol.')}) :
-                await RoleModel.findOne({where: {id: user.role_id, user_id: access.user_id}})
-                .then(role => role?.dataValues)
-                .catch(_error => {throw new RoleError('Ha ocurrido un error al revisar el rol.')});
+                .catch(_error => {throw new UserError('Ha ocurrido un error al revisar el rol.')});
 
-            if (!role && user.role_id) throw new RoleError('El rol proporcionado no existe.');
+            if (!role && user.role_id) throw new UserError('El rol proporcionado no existe.');
 
             const encrypted_password = await encrypt_password(user.password);
 
@@ -42,7 +38,7 @@ class UserDao {
                 createdAt: Date.now(),
                 updatedAt: Date.now(),
                 role_id: role.id ?? null,
-                user_id: access.user_id ?? null,
+                user_id: access.user_id ?? SUPER_ADMIN_ID,
             }
             const [_user, created] = await UserModel.findOrCreate({
                     where: {
@@ -50,7 +46,7 @@ class UserDao {
                     },
                     defaults: new_user,
                 })
-                .catch(_error => {console.log(_error);throw new UserError('Ha ocurrido un error al tratar de crear al usuario.')});
+                .catch(_error => {throw new UserError('Ha ocurrido un error al tratar de crear al usuario.')});
 
             if (!created) throw new UserError('El correo proporcionado ya esta en uso.');
             
@@ -62,33 +58,33 @@ class UserDao {
     }
     async update(access: IAccessPermission, id: string, user: User): Promise<IUserResponse> {
         try {
-            const user_exist = access.super_admin === true ? 
-                await UserModel.findOne({
-                    where: {id: id},
-                    include: [{ model: RoleModel, attributes: ['id', 'name'] }],
-                    attributes: {exclude: ['password']}
-                })
-                .then(user => user)
-                .catch(_error => {throw new UserError('Ha ocurrido un error al revisar al usuario.')}) :
-                await UserModel.findOne({
-                    where: {id: id, user_id: access.user_id},
+            const user_exist = await UserModel.findOne({
+                    where: [
+                        {id: id},
+                        ListCondition(access),
+                    ],
                     include: [{ model: RoleModel, attributes: ['id', 'name'] }],
                     attributes: {exclude: ['password']}
                 })
                 .then(user => user)
                 .catch(_error => {throw new UserError('Ha ocurrido un error al revisar al usuario.')});
 
-            if (!user_exist) throw new UserError('El usuario proporcionado no existe.');
+            if (!user_exist) throw new UserError(`El usuario con ID ${id} no existe.`);
 
             if (user.role_id && (user.role_id !== user_exist.dataValues.role_id)) {
-                const role = access.super_admin === true ? 
-                    await RoleModel.findOne({where: {id: user.role_id}})
-                    .then(role => role)
-                    .catch(_error => {throw new RoleError('Ha ocurrido un error al revisar el rol.')}) :
-                    await RoleModel.findOne({where: {id: user.role_id, user_id: access.user_id}})
-                    .then(role => role)
-                    .catch(_error => {throw new RoleError('Ha ocurrido un error al revisar el rol.')});
-                if (!role) throw new RoleError(`El rol con ID ${user.role_id} no existe.`);
+                const role = await RoleModel.findOne({where: {id: user.role_id}})
+                    .then(role => role?.dataValues)
+                    .catch(_error => {throw new UserError('Ha ocurrido un error al revisar el rol.')});
+
+                if (!role) throw new UserError(`El rol con ID ${user.role_id} no existe.`);
+            }
+
+            if (user.email !== user_exist.dataValues.email) {
+                const email_exist = await UserModel.findOne({where: {email: user.email}})
+                    .then(user => user)
+                    .catch(_error => {throw new UserError('Ha ocurrido un error al revisar al usuario.')});
+
+                if (email_exist) throw new UserError(`El correo ${user.email} ya esta en uso.`);
             }
 
             user_exist.set({
@@ -97,6 +93,7 @@ class UserDao {
                 document_type: user.document_type ?? user_exist.dataValues.document_type,
                 document_number: user.document_number ?? user_exist.dataValues.document_number,
                 phone_number: user.phone_number ?? user_exist.dataValues.phone_number,
+                email: user.email ?? user_exist.dataValues.email,
                 hidden: user.hidden ?? user_exist.dataValues.hidden,                                                   
                 updatedAt: Date.now(),
                 role_id: user.role_id ?? user_exist.dataValues.role_id,
@@ -108,7 +105,7 @@ class UserDao {
 
             if (!updated) throw new UserError('El usuario proporcionado no existe.');
         
-            return UserPresenter(updated.dataValues, updated.dataValues.role.dataValues);
+            return UserPresenter(updated.dataValues, updated.dataValues.role.dataValues, access);
         } catch (error) {
             if (error instanceof Error && error.message) throw new UserError(error.message);
             else throw new Error('Ha ocurrido un error al actualizar al usuario.');
@@ -116,17 +113,16 @@ class UserDao {
     }
     async delete(access: IAccessPermission, id: string): Promise<void> {
         try {
-            const user_exist = access.super_admin === true ? 
-                await UserModel.findOne({where: {id: id}})
-                .then(user => user)
-                .catch(_error => {throw new UserError('Ha ocurrido un error al revisar al usuario.')}) :
-                await UserModel.findOne({where: {id: id, user_id: access.user_id}})
+            const user_exist = await UserModel.findOne({where: {id: id}})
                 .then(user => user)
                 .catch(_error => {throw new UserError('Ha ocurrido un error al revisar al usuario.')});
-            if (!user_exist) throw new UserError('El usuario proporcionado no existe.');
+
+            if (!user_exist) throw new UserError(`El usuario con ID ${id} no existe.`);
+
+            if (access.user_id === id) throw new UserError('No puedes eliminar tu propio usuario.');
 
             user_exist.set({
-                deleted: true,
+                deleted: access.permission.read_deleted && user_exist.dataValues.deleted ? false : true,
                 updatedAt: Date.now(),
             })
             user_exist.save().catch(_error => {throw new UserError('Ha ocurrido un error al tratar de eliminar al usuario.')});
@@ -137,20 +133,10 @@ class UserDao {
     }
     async findById(access: IAccessPermission, id: string): Promise<IUserResponse> {
         try {
-            const user = access.super_admin === true ?
-                await UserModel.findOne({
-                    where: {id: id}, 
-                    include: [{ model: RoleModel, attributes: ['id', 'name'] }],
-                    attributes: {exclude: ['password']}
-                })
-                .then(user => user)
-                .catch(_error => {throw new UserError('Ha ocurrido un error al revisar al usuario.')}) :
-                await UserModel.findOne({
+            const user = await UserModel.findOne({
                     where: [
-                        { id: id },
-                        { user_id: access.user_id },
-                        { hidden: { [Op.ne]: true } },
-                        { deleted: { [Op.ne]: true } }
+                        {id: id},
+                        ListCondition(access),
                     ], 
                     include: [{ model: RoleModel, attributes: ['id', 'name'] }],
                     attributes: {exclude: ['password']}
@@ -160,46 +146,34 @@ class UserDao {
 
             if (!user) throw new UserError(`El usuario con ID ${id} no existe.`);
 
-            return UserPresenter(user.dataValues, user.dataValues.role);
+            return UserPresenter(user.dataValues, user.dataValues.role, access);
         } catch (error) {
             if (error instanceof Error && error.message) throw new UserError(error.message);
             else throw new Error('Ha ocurrido un error al obtener al usuario.');
         }
     }
-    async findAll(access: IAccessPermission, page: number): Promise<{ users: [], total_users: number, total_pages: number, current_page: number}> {
+    async findAll(access: IAccessPermission, page: number, hidden?: boolean): Promise<{ users: [], total_users: number, total_pages: number, current_page: number}> {
         try {
-            const { count, rows} = access.super_admin === true ?
-                await UserModel.findAndCountAll({
+            const { count, rows} = await UserModel.findAndCountAll({
                     attributes: {exclude: ['password']},
                     include: [{ model: RoleModel, attributes: ['id', 'name'] }],
-                    where: {
-                        [Op.or]: [
-                            { super_admin: { [Op.is]: null } }, //excludes super_admin
-                        ],
-                    },
-                    limit: 100,
-                    offset: (page - 1) * 100,
-                })
-                .then(users => users)
-                .catch(_error => {throw new UserError('Ha ocurrido un error al tratar de obtener los usuarios.')}) :
-                await UserModel.findAndCountAll({
                     where: [
-                        { user_id: access.user_id },
-                        ListCondition(access), //excludes hidden and deleted if it doesn't have permission
                         {
                             [Op.or]: [
-                                { super_admin: { [Op.is]: null } }, //excludes super_admin
+                                { super_admin: { [Op.is]: null } },
+                                access.super_admin ? { super_admin: true } : {}
                             ],
-                        }
+                        },
+                        ListCondition(access, hidden)
                     ],
-                    attributes: {exclude: ['password']},
-                    include: [{ model: RoleModel, attributes: ['id', 'name'] }],
                     limit: 100,
                     offset: (page - 1) * 100,
+                    order: [['createdAt', 'ASC']],
                 })
                 .then(users => users)
                 .catch(_error => {throw new UserError('Ha ocurrido un error al tratar de obtener los usuarios.')});
-            const users = rows.map((user: any) => UserPresenter(user.dataValues, user.role.dataValues, access));
+            
+            const users = rows.map((user: any) => UserPresenter(user.dataValues, user.role?.dataValues, access));
             return { users: users as [], total_users: count, total_pages: Math.ceil(count / 100), current_page: page };
         } catch (error) {
             if (error instanceof Error && error.message) throw new UserError(error.message);
@@ -209,7 +183,10 @@ class UserDao {
     async login(email: string, password: string): Promise<ILogin> {
         try {
             const user = await UserModel.findOne({
-                    where: { email: email },
+                    where: [
+                        { email: email },
+                        { deleted: false },
+                    ],
                     include: [{ model: RoleModel, attributes: ['id', 'name'] }]
                 })
                 .then(user => user)

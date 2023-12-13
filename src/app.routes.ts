@@ -33,6 +33,7 @@ import fileRouter from "./application/file/file.routes";
 import messageTemplateRouter from "./application/message-template/message-template.routes";
 import contactRelativeRouter from "./application/contact-relative/contact-relative.routes";
 import eventControlRouter from "./application/event-control/event-control.routes";
+import valueRouter from "./application/value/value.routes";
 
 export const appRouter = Router();
 
@@ -69,6 +70,7 @@ appRouter.use("/api", eventControlRouter);
 appRouter.use("/api", fileRouter);
 appRouter.use("/api", messageTemplateRouter);
 appRouter.use("/api", contactRelativeRouter);
+appRouter.use("/api", valueRouter);
 
 appRouter.get("/uploads/:file_directory_name/:file", async (req: Request, res: Response) => {
     try {
